@@ -1,4 +1,4 @@
-import 'package:new_app/features/store_page/data/model/product_model.dart';
+import 'package:new_app/features/category_subcategory_page/data/model/product_model.dart';
 
 class SubCategoryModel {
   SubCategoryModel({required this.subCategoryName, required this.products});

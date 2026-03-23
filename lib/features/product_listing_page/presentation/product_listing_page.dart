@@ -2,13 +2,14 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/core/utils/app_colors.dart';
-import 'package:new_app/features/store_page/data/model/category_model.dart';
 import 'package:new_app/widget/custom_app_bar.dart';
 import 'package:new_app/widget/custom_bedge.dart';
 
 import '../../../core/utils/app_text_style.dart';
 import '../../../values/export.dart';
-import '../../store_page/data/model/product_model.dart';
+import '../../category_subcategory_page/data/model/category_model.dart';
+import '../../category_subcategory_page/data/model/product_model.dart';
+import '../../product_details_page/presentation/product_details_page.dart';
 
 class ProductListingPage extends StatefulWidget {
   ProductListingPage({super.key, required this.productList, required this.subcategoryName});
@@ -39,48 +40,53 @@ class _ProductListingPageState extends State<ProductListingPage> {
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 240),
         itemCount: widget.productList.length,
-        itemBuilder: (context, proIndex) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          width: 1.sw * 0.5,
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [BoxShadow(offset: Offset(0, 0), color: Color(0X2000001A), blurRadius: 16)],
-          ),
-          child: Stack(
-            alignment: AlignmentGeometry.topRight,
-            children: [
-              Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Image.asset(widget.productList[proIndex].productImage, height: 100.h, width: 100.w),
-                  Row(
-                    mainAxisAlignment: .spaceBetween,
-                    children: [
-                      Text(widget.productList[proIndex].productPrice, style: AppTextStyle.productPrice),
-                      Text(widget.productList[proIndex].productWeight, style: AppTextStyle.productWeight),
-                    ],
-                  ),
-                  Text(widget.productList[proIndex].productName, style: AppTextStyle.productNameStyle),
-                ],
-              ),
-              ValueListenableBuilder(
-                valueListenable: widget.productList[proIndex].isSelected,
-                builder: (context, value, child) {
-                  return InkWell(
-                    onTap: () {
-                      widget.productList[proIndex].isSelected.value = true;
-                      if (!cartProduct.contains(widget.productList[proIndex])) {
-                        cartProduct.add(widget.productList[proIndex]);
-                      }
-                      shoppingCartCount.value = cartProduct.length;
-                    },
-                    child: cartProduct.contains(widget.productList[proIndex]) ? addToCart(widget.productList[proIndex]) : addToCartIcon(widget.productList[proIndex]),
-                  );
-                },
-              ),
-            ],
+        itemBuilder: (context, proIndex) => InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => ProductDetailsPage(product: widget.productList[proIndex])));
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            width: 1.sw * 0.5,
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [BoxShadow(offset: Offset(0, 0), color: Color(0X2000001A), blurRadius: 16)],
+            ),
+            child: Stack(
+              alignment: AlignmentGeometry.topRight,
+              children: [
+                Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    Image.asset(widget.productList[proIndex].productImage, height: 100.h, width: 100.w),
+                    Row(
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        Text(widget.productList[proIndex].productPrice, style: AppTextStyle.productPrice),
+                        Text(widget.productList[proIndex].productWeight, style: AppTextStyle.productWeight),
+                      ],
+                    ),
+                    Text(widget.productList[proIndex].productName, style: AppTextStyle.productNameStyle),
+                  ],
+                ),
+                ValueListenableBuilder(
+                  valueListenable: widget.productList[proIndex].isSelected,
+                  builder: (context, value, child) {
+                    return InkWell(
+                      onTap: () {
+                        widget.productList[proIndex].isSelected.value = true;
+                        if (!cartProduct.contains(widget.productList[proIndex])) {
+                          cartProduct.add(widget.productList[proIndex]);
+                        }
+                        shoppingCartCount.value = cartProduct.length;
+                      },
+                      child: cartProduct.contains(widget.productList[proIndex]) ? addToCart(widget.productList[proIndex]) : addToCartIcon(widget.productList[proIndex]),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

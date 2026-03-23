@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../core/utils/app_colors.dart';
-import '../features/home/data/model/navigation_model.dart';
+import '../features/home_page/data/model/navigation_model.dart';
 import 'custom_bedge.dart';
 
 class CustomNavigationBar extends StatefulWidget {
-  CustomNavigationBar({super.key, required this.navigationItems});
-  ValueNotifier<int> currentIndex = ValueNotifier(0);
+  CustomNavigationBar({super.key, required this.navigationItems, required this.currentIndex});
   List<NavigationItems> navigationItems = [];
+  ValueNotifier<int> currentIndex;
 
   @override
   State<CustomNavigationBar> createState() => _CustomNavigationBarState();
@@ -39,27 +38,14 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           },
           elevation: 0,
           backgroundColor: AppColors.bottomNavigationColor,
-          destinations: List<Widget>.generate(widget.navigationItems.length, (
-            index,
-          ) {
+          destinations: List<Widget>.generate(widget.navigationItems.length, (index) {
             return Column(
               children: [
                 Expanded(
                   child: NavigationDestination(
                     icon: index == 1
-                        ? CustomBadge(
-                            count: 2,
-                            icon: widget.navigationItems[index].icon,
-                            color: index == widget.currentIndex.value
-                                ? AppColors.primaryColor
-                                : Colors.grey,
-                          )
-                        : Icon(
-                            widget.navigationItems[index].icon,
-                            color: index == widget.currentIndex.value
-                                ? AppColors.primaryColor
-                                : Colors.grey,
-                          ),
+                        ? CustomBadge(count: 2, icon: widget.navigationItems[index].icon, color: index == widget.currentIndex.value ? AppColors.primaryColor : Colors.grey)
+                        : Icon(widget.navigationItems[index].icon, color: index == widget.currentIndex.value ? AppColors.primaryColor : Colors.grey),
                     label: widget.navigationItems[index].label,
                   ),
                 ),
@@ -69,10 +55,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                         height: 6,
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                         ),
                       )
                     : null,

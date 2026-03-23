@@ -3,14 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/constant/app_constant.dart';
 import 'package:new_app/core/utils/app_colors.dart';
-import 'package:new_app/features/store_page/data/model/category_model.dart';
-import 'package:new_app/features/store_page/presentation/store_page.dart';
 import 'package:new_app/values/colors.dart';
 import 'package:new_app/widget/custom_app_bar.dart';
 import 'package:new_app/widget/custom_bedge.dart';
 import 'package:new_app/widget/custom_list_tile.dart';
 
 import '../../../core/utils/app_text_style.dart';
+import '../../category_subcategory_page/data/model/category_model.dart';
 import '../data/model/review_data.dart';
 
 class ShopDetailsPage extends StatefulWidget {

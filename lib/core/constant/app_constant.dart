@@ -1,5 +1,7 @@
 class AppText {
   static String appTitle = 'Huge Basket';
+  static String orders = 'My Orders';
+  static String profile = 'Profile';
   static String skipText = 'Skip';
   static String page1Title = 'Near by store and Product';
   static String page2Title = 'Secure Payment Method';

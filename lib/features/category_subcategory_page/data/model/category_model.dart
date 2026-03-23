@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:new_app/features/store_page/data/model/product_model.dart';
-import 'package:new_app/features/store_page/data/model/sub_category_model.dart';
-
+import 'package:new_app/features/category_subcategory_page/data/model/product_model.dart';
+import 'package:new_app/features/category_subcategory_page/data/model/sub_category_model.dart';
 import '../../../../core/constant/app_constant.dart';
 
 class CategoryModel {

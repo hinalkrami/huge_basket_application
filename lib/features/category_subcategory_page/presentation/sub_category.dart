@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/features/category_subcategory_page/presentation/product.dart';
 import 'package:new_app/features/product_listing_page/presentation/product_listing_page.dart';
-import 'package:new_app/features/store_page/presentation/product.dart';
 import '../../../core/constant/app_constant.dart';
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_style.dart';
