@@ -1,0 +1,11 @@
+{
+  "name":"name",
+  "address": "Address",
+  "enterUnitNumber": "Enter Unit Number",
+  "city": "City",
+  "state": "State",
+  "zipcode": "Zipcode",
+  "deliveryInstruction": "Delivery Instruction",
+  "addNew": "Add New",
+  "add": "Add"
+}
