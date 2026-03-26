@@ -85,7 +85,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                 widget.product.isSelected.value = true;
                                 if (!cartProduct.contains(widget.product)) {
                                   cartProduct.add(widget.product);
-                                  print(cartProduct.first.productName);
                                 }
                                 shoppingCartCount.value = cartProduct.length;
                                 isProductInList.value = cartProduct.contains(widget.product);

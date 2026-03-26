@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/constant/app_constant.dart';
 import 'package:new_app/core/utils/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:new_app/core/utils/app_text_style.dart';
 import 'package:new_app/widget/custom_app_bar.dart';
 import 'package:new_app/widget/custom_button.dart';
 import 'package:new_app/widget/custom_text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../values/export.dart';
 
@@ -18,14 +20,22 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  ValueNotifier<bool> isChecked = ValueNotifier(false);
-  late String phoneNumber;
+  final userBox = Hive.box('userBox');
+  final ValueNotifier<bool> isChecked = ValueNotifier(false);
+  // late String phoneNumber;
+  late final pref;
+  void getPhoneNumber() async {
+    pref = await SharedPreferences.getInstance();
+    await pref.setString('phoneNumber', userBox.get('phoneNumber'));
+    print(pref.getString('phoneNumber'));
+  }
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController businessNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  late TextEditingController phoneNumberController = TextEditingController(text: phoneNumber);
+  late TextEditingController phoneNumberController = TextEditingController(/*text: phoneNumber*/);
   TextEditingController zipCodeController = TextEditingController();
   @override
   void dispose() {
@@ -42,8 +52,8 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    phoneNumber = arg['phoneNumber'];
+    final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    // phoneNumber = arg?['phoneNumber'];
     return Scaffold(
       appBar: CustomAppBar(title: AppText.detailsPageTitle, wantLeading: true),
       body: Padding(
@@ -90,7 +100,20 @@ class _DetailsPageState extends State<DetailsPage> {
                   },
                 ),
                 20.verticalSpace,
-                CustomButton(onPressed: () => _formKey.currentState!.validate() ? Navigator.pushNamed(context, AppRoute.homePage) : () {}, buttonSize: true, child: Text('Add')),
+                CustomButton(
+                  onPressed: () {
+                    _formKey.currentState!.validate() ? /*Navigator.pushNamed(context, AppRoute.homePage)*/ Navigator.pop(context) : () {};
+                    userBox.put('phoneNumber', phoneNumberController.text);
+                    userBox.put('businessName', businessNameController.text);
+                    userBox.put('firstName', firstNameController.text);
+                    userBox.put('lastName', lastNameController.text);
+                    userBox.put('emailAdd', emailController.text);
+                    userBox.put('zipcode', zipCodeController.text);
+                    getPhoneNumber();
+                  },
+                  buttonSize: true,
+                  child: Text('Add'),
+                ),
               ],
             ),
           ),

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:new_app/features/auth/presentation/varification_page.dart';
 import 'package:new_app/features/home_page/presentation/main_home_page.dart';
+import 'package:new_app/features/profile_page/presentation/manage_address/add_address.dart';
+import 'package:new_app/features/profile_page/presentation/manage_address/manage_address_page.dart';
+import 'package:new_app/features/my_orders_page/presentation/my_order_page.dart';
 import 'package:new_app/features/product_details_page/presentation/product_details_page.dart';
 import 'package:new_app/features/product_listing_page/presentation/product_listing_page.dart';
 import 'package:new_app/features/profile_page/presentation/profile_page.dart';
@@ -22,16 +25,22 @@ class AppRoute {
   static String productListingPage = '/productListing';
   static String productDetailsPage = '/productDetails';
   static String profilePage = '/profilePage';
+  static String myOrderPage = '/orders';
+  static String manageAddress = '/manageAddress';
+  static String addNewAddress = '/addNewAddress';
   static Map<String, WidgetBuilder> route = {
-    walkThroughPage: (context) => MainHomePage(),
-    loginPage: (context) => LoginPage(),
+    walkThroughPage: (context) => LoginPage(),
+    loginPage: (context) => WalkThroughPage(),
     varification: (context) => VarificationPage(),
     detailsPage: (context) => DetailsPage(),
-    homePage: (context) => WalkThroughPage(),
+    homePage: (context) => MainHomePage(),
     shopDetails: (context) => ShopDetailsPage(),
     storePage: (context) => StorePage(),
     // productListingPage:(context)=>ProductListingPage(productList: productList, subcategoryName: subcategoryName),
     // productDetailsPage:(context)=>ProductDetailsPage(product: product),
-    profilePage: (context) => ProfilePage(),
+    // profilePage: (context) => ProfilePage(),
+    myOrderPage: (context) => MyOrderPage(),
+    manageAddress: (context) => ManageAddressPage(),
+    addNewAddress: (context) => AddAddress(),
   };
 }

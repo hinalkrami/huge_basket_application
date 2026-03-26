@@ -43,6 +43,8 @@ class AppText {
   static String homePageTrailing3 = '3.5 mile';
   static String homePageTrailing4 = '4 mile';
   static String homePageTrailing5 = '4 mile';
+  static String manageAddress = 'Manage Address';
+  static String addAddress = 'Add New';
   static String bottomNavigationLabel1 = 'Store';
   static String bottomNavigationLabel2 = 'My Orders';
   static String bottomNavigationLabel3 = 'Profile';

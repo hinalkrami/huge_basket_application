@@ -8,15 +8,18 @@ import '../core/utils/app_colors.dart';
 import '../values/export.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField({super.key, this.isPhoneNumber = false, required this.hint, this.keyBoardType, this.controller});
+  CustomTextField({super.key, this.isPhoneNumber = false, required this.hint, this.keyBoardType, this.controller, this.suffixIcon, this.maxLine = 1, this.onFieldSubmitted});
   bool isPhoneNumber;
   String? hint;
   TextStyle? hintStyle;
   TextInputType? keyBoardType;
   TextEditingController? controller;
+  void Function(String)? onFieldSubmitted;
+  int? maxLine;
   RegExp phoneNumber = RegExp(r'^[6,7,8,9][0-9]*');
   RegExp name = RegExp(r'^[a-zA-z ]+');
   RegExp email = RegExp(r'^[a-z0-9]+@[a-z]+\.[a-z]+$');
+  IconData? suffixIcon;
   late List<TextInputFormatter>? nameFormatter = [FilteringTextInputFormatter.allow(name)];
   late List<TextInputFormatter>? zipCode = [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)];
   String? Function(String?)? phoneNumberValidation = (value) {
@@ -90,9 +93,12 @@ class CustomTextField extends StatelessWidget {
         : TextFormField(
             controller: controller,
             keyboardType: keyBoardType,
+            textInputAction: .done,
             cursorColor: AppColors.primaryColor,
             autovalidateMode: .onUnfocus,
-            validator: keyBoardType == .name
+            onFieldSubmitted: onFieldSubmitted,
+            maxLines: maxLine,
+            validator: keyBoardType == .name || keyBoardType == .text
                 ? basicValidation
                 : keyBoardType == .emailAddress
                 ? emailValidation
@@ -105,11 +111,12 @@ class CustomTextField extends StatelessWidget {
                 ? zipCode
                 : null,
             decoration: InputDecoration(
+              suffixIcon: Icon(suffixIcon, color: AppColor.grey.withAlpha(120)),
               filled: true,
               fillColor: AppColors.filledColor,
               hintText: hint,
               hintStyle: AppTextStyle.hintStyle,
-              contentPadding: EdgeInsets.symmetric(horizontal: 23.w),
+              contentPadding: EdgeInsets.symmetric(horizontal: 23.w, vertical: 10.h),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
