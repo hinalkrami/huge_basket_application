@@ -8,6 +8,10 @@ class AppButtonStyle {
   double? width;
   double? height;
   ButtonStyle? customStyle;
+  ButtonStyle? filledButtonStyle = FilledButton.styleFrom(
+    shape: RoundedRectangleBorder(),
+    backgroundColor: Colors.transparent,
+  );
 
   ButtonStyle get buttonStyle =>
       customStyle ??

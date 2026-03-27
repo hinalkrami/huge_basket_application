@@ -1,43 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
-import 'package:new_app/features/local/hive_box.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/address_model.dart';
-import 'package:new_app/values/export.dart';
-import 'package:new_app/widget/custom_app_bar.dart';
-import 'package:new_app/widget/custom_button.dart';
-import 'package:new_app/widget/custom_text_field.dart';
 
 import '../../../../generated/l10n.dart';
+import '../../../../values/export.dart';
+import '../../../../widget/custom_app_bar.dart';
+import '../../../../widget/custom_button.dart';
+import '../../../../widget/custom_text_field.dart';
+import '../../../local/hive_box.dart';
 
-class AddAddress extends StatefulWidget {
-  const AddAddress({super.key});
+class EditAddress extends StatefulWidget {
+  const EditAddress({super.key});
 
   @override
-  State<AddAddress> createState() => _AddAddressState();
+  State<EditAddress> createState() => _EditAddressState();
 }
 
-class _AddAddressState extends State<AddAddress> {
+class _EditAddressState extends State<EditAddress> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController _address;
-  late TextEditingController _unitNumber;
-  late TextEditingController _city;
-  late TextEditingController _state;
-  late TextEditingController _zipCode;
-  late TextEditingController _deliveryInstruction;
-  @override
-  void initState() {
-    // TODO: implement initState
-    _address = TextEditingController();
-    _unitNumber = TextEditingController();
-    _city = TextEditingController();
-    _state = TextEditingController();
-    _zipCode = TextEditingController();
-    _deliveryInstruction = TextEditingController();
-    super.initState();
-  }
-
-  List<AddressModel> addresses = [];
-
+  late final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+  late AddressModel? address = arg['selectedAddress'];
+  late int? index = arg['index'];
+  late final TextEditingController _address = TextEditingController(text: address!.location);
+  late final TextEditingController _unitNumber = TextEditingController(text: address!.unitNumber);
+  late final TextEditingController _city = TextEditingController(text: address!.city);
+  late final TextEditingController _state = TextEditingController(text: address!.state);
+  late final TextEditingController _zipCode = TextEditingController(text: address!.zipCode);
+  late final TextEditingController _deliveryInstruction = TextEditingController(
+    text: address!.deliveryInstruction,
+  );
   @override
   void dispose() {
     _address.dispose();
@@ -52,7 +42,7 @@ class _AddAddressState extends State<AddAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Add New Address', wantLeading: true),
+      appBar: CustomAppBar(title: S.of(context).editAddress, wantLeading: true),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -87,19 +77,20 @@ class _AddAddressState extends State<AddAddress> {
               CustomButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    HiveBox().addAddressDetails(
-                      _address.text,
-                      _unitNumber.text,
-                      _city.text,
-                      _state.text,
-                      _zipCode.text,
-                      _deliveryInstruction.text,
+                    AddressModel editedAddress = AddressModel(
+                      location: _address.text,
+                      unitNumber: _unitNumber.text,
+                      city: _city.text,
+                      state: _state.text,
+                      zipCode: _zipCode.text,
+                      deliveryInstruction: _deliveryInstruction.text,
                     );
+                    HiveBox().updateAddressDetails(index!, editedAddress);
                     Navigator.pop(context);
                   }
                 },
                 buttonSize: true,
-                child: Text(S.of(context).add),
+                child: Text(S.of(context).update),
               ).wrapPaddingTop(70.h),
             ],
           ),

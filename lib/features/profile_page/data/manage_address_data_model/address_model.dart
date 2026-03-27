@@ -1,19 +1,26 @@
 import 'package:hive_ce/hive.dart';
 part 'address_model.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class AddressModel extends HiveObject {
-  AddressModel({required this.location, required this.unitNumber, required this.city, required this.state, required this.zipCode, required this.deliveryInstruction});
+  AddressModel({
+    this.location,
+    this.unitNumber,
+    this.city,
+    this.state,
+    this.zipCode,
+    this.deliveryInstruction,
+  });
   @HiveField(0)
-  late String location;
+  late String? location;
   @HiveField(1)
-  late String unitNumber;
+  late String? unitNumber;
   @HiveField(2)
-  late String city;
+  late String? city;
   @HiveField(3)
-  late String state;
+  late String? state;
   @HiveField(4)
-  late String zipCode;
+  late String? zipCode;
   @HiveField(5)
-  late String deliveryInstruction;
+  late String? deliveryInstruction;
 }

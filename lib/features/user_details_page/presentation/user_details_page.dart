@@ -11,6 +11,7 @@ import 'package:new_app/widget/custom_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../values/export.dart';
+import '../../local/hive_box.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
@@ -20,26 +21,27 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  final userBox = Hive.box('userBox');
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
-  // late String phoneNumber;
-  late final pref;
-  void getPhoneNumber() async {
-    pref = await SharedPreferences.getInstance();
-    await pref.setString('phoneNumber', userBox.get('phoneNumber'));
-    print(pref.getString('phoneNumber'));
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late TextEditingController businessNameController;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController emailController;
+  late TextEditingController phoneNumberController;
+  late TextEditingController zipCodeController;
+  @override
+  void initState() {
+    super.initState();
+    businessNameController = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneNumberController = TextEditingController();
+    zipCodeController = TextEditingController();
   }
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController businessNameController = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  late TextEditingController phoneNumberController = TextEditingController(/*text: phoneNumber*/);
-  TextEditingController zipCodeController = TextEditingController();
   @override
   void dispose() {
-    // TODO: implement dispose
     isChecked.dispose();
     businessNameController.dispose();
     firstNameController.dispose();
@@ -52,8 +54,6 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-    // phoneNumber = arg?['phoneNumber'];
     return Scaffold(
       appBar: CustomAppBar(title: AppText.detailsPageTitle, wantLeading: true),
       body: Padding(
@@ -65,12 +65,37 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Column(
               spacing: 20,
               children: [
-                CustomTextField(hint: AppText.businessName, controller: businessNameController, keyBoardType: .name),
-                CustomTextField(hint: AppText.firstName, controller: firstNameController, keyBoardType: .name),
-                CustomTextField(hint: AppText.lastName, controller: lastNameController, keyBoardType: .name),
-                CustomTextField(hint: AppText.emailAdd, controller: emailController, keyBoardType: .emailAddress),
-                CustomTextField(isPhoneNumber: true, hint: AppText.phoneHintText, controller: phoneNumberController, keyBoardType: .phone),
-                CustomTextField(hint: AppText.zipcode, controller: zipCodeController, keyBoardType: .number),
+                CustomTextField(
+                  hint: AppText.businessName,
+                  controller: businessNameController,
+                  keyBoardType: .name,
+                ),
+                CustomTextField(
+                  hint: AppText.firstName,
+                  controller: firstNameController,
+                  keyBoardType: .name,
+                ),
+                CustomTextField(
+                  hint: AppText.lastName,
+                  controller: lastNameController,
+                  keyBoardType: .name,
+                ),
+                CustomTextField(
+                  hint: AppText.emailAdd,
+                  controller: emailController,
+                  keyBoardType: .emailAddress,
+                ),
+                CustomTextField(
+                  isPhoneNumber: true,
+                  hint: AppText.phoneHintText,
+                  controller: phoneNumberController,
+                  keyBoardType: .phone,
+                ),
+                CustomTextField(
+                  hint: AppText.zipcode,
+                  controller: zipCodeController,
+                  keyBoardType: .number,
+                ),
                 20.verticalSpace,
                 ValueListenableBuilder(
                   valueListenable: isChecked,
@@ -92,7 +117,10 @@ class _DetailsPageState extends State<DetailsPage> {
                         text: TextSpan(
                           children: [
                             TextSpan(text: AppText.agreeText, style: AppTextStyle.agreeTextStyle),
-                            TextSpan(text: AppText.termsCondition, style: AppTextStyle.termsConditionStyle),
+                            TextSpan(
+                              text: AppText.termsCondition,
+                              style: AppTextStyle.termsConditionStyle,
+                            ),
                           ],
                         ),
                       ),
@@ -101,18 +129,21 @@ class _DetailsPageState extends State<DetailsPage> {
                 ),
                 20.verticalSpace,
                 CustomButton(
-                  onPressed: () {
-                    _formKey.currentState!.validate() ? /*Navigator.pushNamed(context, AppRoute.homePage)*/ Navigator.pop(context) : () {};
-                    userBox.put('phoneNumber', phoneNumberController.text);
-                    userBox.put('businessName', businessNameController.text);
-                    userBox.put('firstName', firstNameController.text);
-                    userBox.put('lastName', lastNameController.text);
-                    userBox.put('emailAdd', emailController.text);
-                    userBox.put('zipcode', zipCodeController.text);
-                    getPhoneNumber();
-                  },
                   buttonSize: true,
                   child: Text('Add'),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.pushNamed(context, AppRoute.homePage);
+                      // HiveBox().addUserDetails(
+                      //   phoneNumberController.text,
+                      //   businessNameController.text,
+                      //   emailController.text,
+                      //   firstNameController.text,
+                      //   lastNameController.text,
+                      //   zipCodeController.text,
+                      // );
+                    }
+                  },
                 ),
               ],
             ),

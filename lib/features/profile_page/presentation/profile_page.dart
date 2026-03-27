@@ -21,7 +21,11 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late final pref;
   List<ProfileDataModel> data = [
-    ProfileDataModel(icon: Icons.location_on_outlined, title: 'Manage Address', page: ManageAddressPage()),
+    ProfileDataModel(
+      icon: Icons.location_on_outlined,
+      title: 'Manage Address',
+      page: ManageAddressPage(),
+    ),
     ProfileDataModel(icon: Icons.chat_bubble_outline_rounded, title: 'Recent Chat'),
     ProfileDataModel(icon: Icons.notifications_none_rounded, title: 'Notification'),
     ProfileDataModel(icon: Icons.star_border_rounded, title: 'Rate the App'),
@@ -44,7 +48,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       body: GridView.builder(
         itemCount: data.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1.1),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.1,
+        ),
         itemBuilder: (context, index) => InkWell(
           onTap: data[index].page != null
               ? () {

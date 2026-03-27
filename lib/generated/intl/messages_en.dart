@@ -25,13 +25,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "addNew": MessageLookupByLibrary.simpleMessage("Add New"),
         "address": MessageLookupByLibrary.simpleMessage("Address"),
+        "change": MessageLookupByLibrary.simpleMessage("Change"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
+        "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deliveryInstruction":
             MessageLookupByLibrary.simpleMessage("Delivery Instruction"),
+        "editAddress": MessageLookupByLibrary.simpleMessage("Edit Address"),
         "enterUnitNumber":
             MessageLookupByLibrary.simpleMessage("Enter Unit Number"),
         "name": MessageLookupByLibrary.simpleMessage("name"),
         "state": MessageLookupByLibrary.simpleMessage("State"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "zipcode": MessageLookupByLibrary.simpleMessage("Zipcode")
       };
 }

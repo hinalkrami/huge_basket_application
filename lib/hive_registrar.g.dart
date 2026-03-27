@@ -3,16 +3,19 @@
 // Check in to version control
 
 import 'package:hive_ce/hive_ce.dart';
+import 'package:new_app/features/auth/data/model/user_details_model.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/address_model.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(AddressModelAdapter());
+    registerAdapter(UserDetailsModelAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
     registerAdapter(AddressModelAdapter());
+    registerAdapter(UserDetailsModelAdapter());
   }
 }

@@ -7,5 +7,9 @@
   "zipcode": "Zipcode",
   "deliveryInstruction": "Delivery Instruction",
   "addNew": "Add New",
-  "add": "Add"
+  "add": "Add",
+  "delete": "Delete",
+  "change": "Change",
+  "editAddress": "Edit Address",
+  "update": "Update"
 }

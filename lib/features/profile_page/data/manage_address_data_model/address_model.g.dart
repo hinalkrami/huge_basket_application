@@ -8,7 +8,7 @@ part of 'address_model.dart';
 
 class AddressModelAdapter extends TypeAdapter<AddressModel> {
   @override
-  final typeId = 0;
+  final typeId = 1;
 
   @override
   AddressModel read(BinaryReader reader) {

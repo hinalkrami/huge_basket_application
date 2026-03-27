@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:new_app/features/auth/presentation/varification_page.dart';
 import 'package:new_app/features/home_page/presentation/main_home_page.dart';
 import 'package:new_app/features/profile_page/presentation/manage_address/add_address.dart';
+import 'package:new_app/features/profile_page/presentation/manage_address/edit_address.dart';
 import 'package:new_app/features/profile_page/presentation/manage_address/manage_address_page.dart';
 import 'package:new_app/features/my_orders_page/presentation/my_order_page.dart';
 import 'package:new_app/features/shop_details_page/presentation/shop_details_page.dart';
@@ -24,8 +25,9 @@ class AppRoute {
   static String myOrderPage = '/orders';
   static String manageAddress = '/manageAddress';
   static String addNewAddress = '/addNewAddress';
+  static String editAddress = '/editAddress';
   static Map<String, WidgetBuilder> route = {
-    walkThroughPage: (context) => LoginPage(),
+    walkThroughPage: (context) => ManageAddressPage(),
     loginPage: (context) => WalkThroughPage(),
     varification: (context) => VarificationPage(),
     detailsPage: (context) => DetailsPage(),
@@ -36,7 +38,8 @@ class AppRoute {
     // productDetailsPage:(context)=>ProductDetailsPage(product: product),
     // profilePage: (context) => ProfilePage(),
     myOrderPage: (context) => MyOrderPage(),
-    manageAddress: (context) => ManageAddressPage(),
+    manageAddress: (context) => LoginPage(),
     addNewAddress: (context) => AddAddress(),
+    editAddress: (context) => EditAddress(),
   };
 }

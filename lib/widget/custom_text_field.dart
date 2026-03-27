@@ -8,7 +8,16 @@ import '../core/utils/app_colors.dart';
 import '../values/export.dart';
 
 class CustomTextField extends StatelessWidget {
-  CustomTextField({super.key, this.isPhoneNumber = false, required this.hint, this.keyBoardType, this.controller, this.suffixIcon, this.maxLine = 1, this.onFieldSubmitted});
+  CustomTextField({
+    super.key,
+    this.isPhoneNumber = false,
+    required this.hint,
+    this.keyBoardType,
+    this.controller,
+    this.suffixIcon,
+    this.maxLine = 1,
+    this.onFieldSubmitted,
+  });
   bool isPhoneNumber;
   String? hint;
   TextStyle? hintStyle;
@@ -21,7 +30,10 @@ class CustomTextField extends StatelessWidget {
   RegExp email = RegExp(r'^[a-z0-9]+@[a-z]+\.[a-z]+$');
   IconData? suffixIcon;
   late List<TextInputFormatter>? nameFormatter = [FilteringTextInputFormatter.allow(name)];
-  late List<TextInputFormatter>? zipCode = [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(6)];
+  late List<TextInputFormatter>? zipCode = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(6),
+  ];
   String? Function(String?)? phoneNumberValidation = (value) {
     if (value!.isEmpty) {
       return '${AppText.phoneHintText} should not be empty.';
@@ -32,13 +44,13 @@ class CustomTextField extends StatelessWidget {
   };
   late String? Function(String?)? basicValidation = (value) {
     if (value!.isEmpty) {
-      return 'Please Enter $hint.';
+      return 'Please enter ${hint?.toLowerCase()}.';
     }
     return null;
   };
   late String? Function(String?)? zipCodeValidation = (value) {
     if (value!.isEmpty) {
-      return 'Please Enter $hint.';
+      return 'Please enter ${hint?.toLowerCase()}.';
     } else if (value.length < 6) {
       return 'Length should be of 6 digits.';
     }
@@ -46,7 +58,7 @@ class CustomTextField extends StatelessWidget {
   };
   late String? Function(String?)? emailValidation = (value) {
     if (value!.isEmpty) {
-      return 'Please Enter $hint.';
+      return 'Please enter ${hint?.toLowerCase()}.';
     } else if (!email.hasMatch(value)) {
       return 'Email should be in \'xyz12@gmail.com\'';
     }
@@ -87,13 +99,18 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
             showDropdownIcon: false,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly, FilteringTextInputFormatter.allow(phoneNumber), LengthLimitingTextInputFormatter(10)],
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              FilteringTextInputFormatter.allow(phoneNumber),
+              LengthLimitingTextInputFormatter(10),
+            ],
             validator: phoneNumberValidation,
           )
         : TextFormField(
             controller: controller,
             keyboardType: keyBoardType,
-            textInputAction: .done,
+            textInputAction: .next,
+            textCapitalization: .words,
             cursorColor: AppColors.primaryColor,
             autovalidateMode: .onUnfocus,
             onFieldSubmitted: onFieldSubmitted,

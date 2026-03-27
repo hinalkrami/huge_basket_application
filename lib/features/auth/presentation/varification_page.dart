@@ -27,10 +27,6 @@ class _VarificationPageState extends State<VarificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    String phoneNumber = arg['phoneNumber'];
-    print('phoneNumber:$phoneNumber');
-
     return Scaffold(
       appBar: CustomAppBar(title: AppText.varificationTitle, wantLeading: true),
       body: SingleChildScrollView(
@@ -66,7 +62,7 @@ class _VarificationPageState extends State<VarificationPage> {
                 CustomButton(
                   onPressed: () {
                     if (otpController.length == 4) {
-                      Navigator.pushNamed(context, AppRoute.detailsPage, arguments: {'phoneNumber': phoneNumber});
+                      Navigator.pushNamed(context, AppRoute.detailsPage);
                     }
                   },
                   buttonSize: true,
