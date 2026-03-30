@@ -2,8 +2,7 @@ import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:new_app/core/utils/app_text_style.dart';
-
-import '../core/constant/app_constant.dart';
+import 'package:new_app/core/utils/app_validator.dart';
 import '../core/utils/app_colors.dart';
 import '../values/export.dart';
 
@@ -16,62 +15,34 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.suffixIcon,
     this.maxLine = 1,
-    this.onFieldSubmitted,
+    this.validator,
+    this.inputFormator,
+    this.onCountryChanged,
+    this.initialCountryCode = CountryCodeEnum.us,
   });
   bool isPhoneNumber;
   String? hint;
   TextStyle? hintStyle;
   TextInputType? keyBoardType;
   TextEditingController? controller;
-  void Function(String)? onFieldSubmitted;
   int? maxLine;
-  RegExp phoneNumber = RegExp(r'^[6,7,8,9][0-9]*');
-  RegExp name = RegExp(r'^[a-zA-z ]+');
-  RegExp email = RegExp(r'^[a-z0-9]+@[a-z]+\.[a-z]+$');
   IconData? suffixIcon;
-  late List<TextInputFormatter>? nameFormatter = [FilteringTextInputFormatter.allow(name)];
-  late List<TextInputFormatter>? zipCode = [
-    FilteringTextInputFormatter.digitsOnly,
-    LengthLimitingTextInputFormatter(6),
-  ];
-  String? Function(String?)? phoneNumberValidation = (value) {
-    if (value!.isEmpty) {
-      return '${AppText.phoneHintText} should not be empty.';
-    } else if (value.length < 10) {
-      return '${AppText.phoneHintText} should be in 10 digits.';
-    }
-    return null;
-  };
-  late String? Function(String?)? basicValidation = (value) {
-    if (value!.isEmpty) {
-      return 'Please enter ${hint?.toLowerCase()}.';
-    }
-    return null;
-  };
-  late String? Function(String?)? zipCodeValidation = (value) {
-    if (value!.isEmpty) {
-      return 'Please enter ${hint?.toLowerCase()}.';
-    } else if (value.length < 6) {
-      return 'Length should be of 6 digits.';
-    }
-    return null;
-  };
-  late String? Function(String?)? emailValidation = (value) {
-    if (value!.isEmpty) {
-      return 'Please enter ${hint?.toLowerCase()}.';
-    } else if (!email.hasMatch(value)) {
-      return 'Email should be in \'xyz12@gmail.com\'';
-    }
-    return null;
-  };
+  void Function(Country)? onCountryChanged;
+
+  String? Function(String?)? validator;
+  List<TextInputFormatter>? inputFormator;
+  CountryCodeEnum? initialCountryCode;
+  void Function(String, Country)? onPhoneNumberChanged;
+  late AppValidator customValidator = AppValidator(hint: hint);
   @override
   Widget build(BuildContext context) {
     return isPhoneNumber
         ? PhoneNumberField(
             pickerType: .fullScreen,
-            initialCountryCode: CountryCode.us,
+            initialCountryCode: initialCountryCode,
             showFlag: false,
             controller: controller,
+            onCountryChanged: onCountryChanged,
             style: CountrifyFieldStyle(
               filled: true,
               cursorColor: AppColors.primaryColor,
@@ -101,10 +72,10 @@ class CustomTextField extends StatelessWidget {
             showDropdownIcon: false,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
-              FilteringTextInputFormatter.allow(phoneNumber),
+              FilteringTextInputFormatter.allow(customValidator.phoneNumber),
               LengthLimitingTextInputFormatter(10),
             ],
-            validator: phoneNumberValidation,
+            validator: customValidator.phoneNumberValidation,
           )
         : TextFormField(
             controller: controller,
@@ -113,20 +84,23 @@ class CustomTextField extends StatelessWidget {
             textCapitalization: .words,
             cursorColor: AppColors.primaryColor,
             autovalidateMode: .onUnfocus,
-            onFieldSubmitted: onFieldSubmitted,
             maxLines: maxLine,
-            validator: keyBoardType == .name || keyBoardType == .text
-                ? basicValidation
-                : keyBoardType == .emailAddress
-                ? emailValidation
-                : keyBoardType == .number
-                ? zipCodeValidation
-                : null,
-            inputFormatters: keyBoardType == .name
-                ? nameFormatter
-                : keyBoardType == .number
-                ? zipCode
-                : null,
+            validator:
+                validator ??
+                (keyBoardType == .name || keyBoardType == .text
+                    ? customValidator.basicValidation
+                    : keyBoardType == .emailAddress
+                    ? customValidator.emailValidation
+                    : keyBoardType == .number
+                    ? customValidator.zipCodeValidation
+                    : null),
+            inputFormatters:
+                inputFormator ??
+                (keyBoardType == .name
+                    ? customValidator.nameFormatter
+                    : keyBoardType == .number
+                    ? customValidator.zipCode
+                    : null),
             decoration: InputDecoration(
               suffixIcon: Icon(suffixIcon, color: AppColor.grey.withAlpha(120)),
               filled: true,

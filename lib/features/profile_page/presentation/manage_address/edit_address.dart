@@ -1,6 +1,9 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/address_model.dart';
 
+import '../../../../core/utils/app_validator.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../values/export.dart';
 import '../../../../widget/custom_app_bar.dart';
@@ -8,25 +11,26 @@ import '../../../../widget/custom_button.dart';
 import '../../../../widget/custom_text_field.dart';
 import '../../../local/hive_box.dart';
 
-class EditAddress extends StatefulWidget {
-  const EditAddress({super.key});
-
+@RoutePage()
+class EditAddressPage extends StatefulWidget {
+  EditAddressPage({super.key, required this.index, required this.address});
+  AddressModel? address;
+  int? index;
   @override
-  State<EditAddress> createState() => _EditAddressState();
+  State<EditAddressPage> createState() => _EditAddressState();
 }
 
-class _EditAddressState extends State<EditAddress> {
+class _EditAddressState extends State<EditAddressPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-  late AddressModel? address = arg['selectedAddress'];
-  late int? index = arg['index'];
-  late final TextEditingController _address = TextEditingController(text: address!.location);
-  late final TextEditingController _unitNumber = TextEditingController(text: address!.unitNumber);
-  late final TextEditingController _city = TextEditingController(text: address!.city);
-  late final TextEditingController _state = TextEditingController(text: address!.state);
-  late final TextEditingController _zipCode = TextEditingController(text: address!.zipCode);
+  late final TextEditingController _address = TextEditingController(text: widget.address!.location);
+  late final TextEditingController _unitNumber = TextEditingController(
+    text: widget.address!.unitNumber,
+  );
+  late final TextEditingController _city = TextEditingController(text: widget.address!.city);
+  late final TextEditingController _state = TextEditingController(text: widget.address!.state);
+  late final TextEditingController _zipCode = TextEditingController(text: widget.address!.zipCode);
   late final TextEditingController _deliveryInstruction = TextEditingController(
-    text: address!.deliveryInstruction,
+    text: widget.address!.deliveryInstruction,
   );
   @override
   void dispose() {
@@ -59,6 +63,8 @@ class _EditAddressState extends State<EditAddress> {
                 controller: _unitNumber,
                 hint: S.of(context).enterUnitNumber,
                 keyBoardType: .number,
+                validator: AppValidator(hint: S.of(context).enterUnitNumber).unitNumberValidation,
+                inputFormator: AppValidator().unitNumberCode,
               ),
               CustomTextField(controller: _city, hint: S.of(context).city, keyBoardType: .name),
               CustomTextField(controller: _state, hint: S.of(context).state, keyBoardType: .name),
@@ -73,7 +79,6 @@ class _EditAddressState extends State<EditAddress> {
                 maxLine: 5,
                 keyBoardType: .text,
               ),
-
               CustomButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -85,8 +90,8 @@ class _EditAddressState extends State<EditAddress> {
                       zipCode: _zipCode.text,
                       deliveryInstruction: _deliveryInstruction.text,
                     );
-                    HiveBox().updateAddressDetails(index!, editedAddress);
-                    Navigator.pop(context);
+                    HiveBox().updateAddressDetails(widget.index!, editedAddress);
+                    context.router.back();
                   }
                 },
                 buttonSize: true,

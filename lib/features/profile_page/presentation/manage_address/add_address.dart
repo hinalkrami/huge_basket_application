@@ -1,5 +1,8 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';
+import 'package:new_app/core/utils/app_validator.dart';
 import 'package:new_app/features/local/hive_box.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/address_model.dart';
 import 'package:new_app/values/export.dart';
@@ -9,14 +12,15 @@ import 'package:new_app/widget/custom_text_field.dart';
 
 import '../../../../generated/l10n.dart';
 
-class AddAddress extends StatefulWidget {
-  const AddAddress({super.key});
+@RoutePage()
+class AddAddressPage extends StatefulWidget {
+  const AddAddressPage({super.key});
 
   @override
-  State<AddAddress> createState() => _AddAddressState();
+  State<AddAddressPage> createState() => _AddAddressState();
 }
 
-class _AddAddressState extends State<AddAddress> {
+class _AddAddressState extends State<AddAddressPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _address;
   late TextEditingController _unitNumber;
@@ -69,6 +73,8 @@ class _AddAddressState extends State<AddAddress> {
                 controller: _unitNumber,
                 hint: S.of(context).enterUnitNumber,
                 keyBoardType: .number,
+                validator: AppValidator(hint: S.of(context).enterUnitNumber).unitNumberValidation,
+                inputFormator: AppValidator().unitNumberCode,
               ),
               CustomTextField(controller: _city, hint: S.of(context).city, keyBoardType: .name),
               CustomTextField(controller: _state, hint: S.of(context).state, keyBoardType: .name),
@@ -83,7 +89,6 @@ class _AddAddressState extends State<AddAddress> {
                 maxLine: 5,
                 keyBoardType: .text,
               ),
-
               CustomButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -95,7 +100,7 @@ class _AddAddressState extends State<AddAddress> {
                       _zipCode.text,
                       _deliveryInstruction.text,
                     );
-                    Navigator.pop(context);
+                    context.router.back();
                   }
                 },
                 buttonSize: true,

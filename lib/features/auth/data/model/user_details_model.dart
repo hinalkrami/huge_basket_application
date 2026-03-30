@@ -1,3 +1,4 @@
+import 'package:countrify/countrify.dart';
 import 'package:hive_ce/hive.dart';
 part 'user_details_model.g.dart';
 
@@ -15,5 +16,21 @@ class UserDetailsModel {
   late String? emailAdd;
   @HiveField(5)
   late String? zipCode;
-  UserDetailsModel({this.userNumber, this.zipCode, this.businessName, this.emailAdd, this.firstName, this.lastName});
+  @HiveField(6)
+  late bool isLogin;
+  @HiveField(7)
+  late bool isDetailsFilled;
+  @HiveField(8)
+  late String? country;
+  UserDetailsModel({
+    this.userNumber,
+    this.zipCode,
+    this.businessName,
+    this.emailAdd,
+    this.firstName,
+    this.lastName,
+    this.isLogin = false,
+    this.isDetailsFilled = false,
+    this.country,
+  });
 }

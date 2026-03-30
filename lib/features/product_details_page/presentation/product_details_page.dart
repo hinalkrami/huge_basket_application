@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../../../values/export.dart';
 import '../../../widget/custom_app_bar.dart';
 import '../../category_subcategory_page/data/model/product_model.dart';
 
+@RoutePage()
 class ProductDetailsPage extends StatefulWidget {
   ProductDetailsPage({super.key, required this.product});
   Product product;
@@ -39,7 +41,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ValueListenableBuilder(
             valueListenable: shoppingCartCount,
             builder: (context, value, child) {
-              return CustomBadge(icon: Icons.shopping_cart, count: shoppingCartCount.value, color: AppColors.black);
+              return CustomBadge(
+                icon: Icons.shopping_cart,
+                count: shoppingCartCount.value,
+                color: AppColors.black,
+              );
             },
           ),
         ],
@@ -60,14 +66,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   children: [
                     SizedBox(
                       height: 1.sh * 0.25,
-                      child: PageView.builder(controller: _pageController, itemCount: 5, itemBuilder: (context, index) => Image.asset(widget.product.productImage)),
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => Image.asset(widget.product.productImage),
+                      ),
                     ),
                     20.verticalSpace,
                     Center(
                       child: SmoothPageIndicator(
                         controller: _pageController,
                         count: 5,
-                        effect: SlideEffect(type: .slideUnder, activeDotColor: AppColors.primaryColor, dotColor: AppColor.grey.withAlpha(100), dotHeight: 1.sh * 0.0035, dotWidth: 1.sw * 0.04),
+                        effect: SlideEffect(
+                          type: .slideUnder,
+                          activeDotColor: AppColors.primaryColor,
+                          dotColor: AppColor.grey.withAlpha(100),
+                          dotHeight: 1.sh * 0.0035,
+                          dotWidth: 1.sw * 0.04,
+                        ),
                       ),
                     ),
                     20.verticalSpace,
@@ -92,7 +108,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                               child: ValueListenableBuilder(
                                 valueListenable: isProductInList,
                                 builder: (context, value, child) {
-                                  return cartProduct.contains(widget.product) || isProductInList.value ? addToCart(widget.product) : addToCartIcon(widget.product);
+                                  return cartProduct.contains(widget.product) ||
+                                          isProductInList.value
+                                      ? addToCart(widget.product)
+                                      : addToCartIcon(widget.product);
                                 },
                               ),
                             );
@@ -129,7 +148,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
           Container(
             decoration: BoxDecoration(
-              boxShadow: [BoxShadow(offset: Offset(0, 15), color: Colors.grey.shade100, blurRadius: 25.r)],
+              boxShadow: [
+                BoxShadow(offset: Offset(0, 15), color: Colors.grey.shade100, blurRadius: 25.r),
+              ],
             ),
             child: ValueListenableBuilder(
               valueListenable: isProductInList,
@@ -184,9 +205,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     product.cartCount.value--;
                   }
                 },
-                style: IconButton.styleFrom(overlayColor: AppColors.primaryColor, shape: CircleBorder(), alignment: .center),
+                style: IconButton.styleFrom(
+                  overlayColor: AppColors.primaryColor,
+                  shape: CircleBorder(),
+                  alignment: .center,
+                ),
                 visualDensity: VisualDensity(vertical: -4),
-                icon: product.cartCount.value == 1 ? Icon(CupertinoIcons.delete, color: AppColor.red, weight: 30, size: 18.sp) : Icon(Icons.minimize_rounded, weight: 50, size: 18.sp),
+                icon: product.cartCount.value == 1
+                    ? Icon(CupertinoIcons.delete, color: AppColor.red, weight: 30, size: 18.sp)
+                    : Icon(Icons.minimize_rounded, weight: 50, size: 18.sp),
               ),
               Text(
                 '${product.cartCount.value}',
@@ -196,7 +223,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 onPressed: () {
                   product.cartCount.value++;
                 },
-                style: IconButton.styleFrom(overlayColor: AppColors.primaryColor, shape: CircleBorder()),
+                style: IconButton.styleFrom(
+                  overlayColor: AppColors.primaryColor,
+                  shape: CircleBorder(),
+                ),
                 iconSize: 25.sp,
                 splashRadius: 20.r,
                 icon: Icon(Icons.add_rounded, color: AppColors.black, weight: 30),
@@ -212,7 +242,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget addToCartIcon(Product product) {
     // product.cartCount.value = 1;
     return DottedBorder(
-      options: CircularDottedBorderOptions(color: AppColors.primaryColor, strokeWidth: 2, dashPattern: [5, 7], strokeCap: StrokeCap.round),
+      options: CircularDottedBorderOptions(
+        color: AppColors.primaryColor,
+        strokeWidth: 2,
+        dashPattern: [5, 7],
+        strokeCap: StrokeCap.round,
+      ),
       child: Container(
         decoration: BoxDecoration(color: AppColors.tabBarColor, shape: .circle),
         padding: EdgeInsets.all(2),

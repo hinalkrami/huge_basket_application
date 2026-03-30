@@ -23,13 +23,16 @@ class UserDetailsModelAdapter extends TypeAdapter<UserDetailsModel> {
       emailAdd: fields[4] as String?,
       firstName: fields[2] as String?,
       lastName: fields[3] as String?,
+      isLogin: fields[6] == null ? false : fields[6] as bool,
+      isDetailsFilled: fields[7] == null ? false : fields[7] as bool,
+      country: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserDetailsModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userNumber)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class UserDetailsModelAdapter extends TypeAdapter<UserDetailsModel> {
       ..writeByte(4)
       ..write(obj.emailAdd)
       ..writeByte(5)
-      ..write(obj.zipCode);
+      ..write(obj.zipCode)
+      ..writeByte(6)
+      ..write(obj.isLogin)
+      ..writeByte(7)
+      ..write(obj.isDetailsFilled)
+      ..writeByte(8)
+      ..write(obj.country);
   }
 
   @override

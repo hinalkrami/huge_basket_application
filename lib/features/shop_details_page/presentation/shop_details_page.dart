@@ -1,3 +1,5 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_app/core/config/app_route.dart';
@@ -12,8 +14,21 @@ import '../../../core/utils/app_text_style.dart';
 import '../../category_subcategory_page/data/model/category_model.dart';
 import '../data/model/review_data.dart';
 
+@RoutePage()
 class ShopDetailsPage extends StatefulWidget {
-  const ShopDetailsPage({super.key});
+  ShopDetailsPage({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.subTitle,
+    required this.trailingText,
+    required this.subTitle2,
+  });
+  String image;
+  String title;
+  String subTitle;
+  String subTitle2;
+  String trailingText;
   @override
   State<ShopDetailsPage> createState() => _ShopDetailsPageState();
 }
@@ -29,12 +44,6 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    String image = arg['image'];
-    String title = arg['title'];
-    String subTitle = arg['subTitle'];
-    String subTitle2 = arg['subTitle2'];
-    String trailingText = arg['trailingText'];
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -48,7 +57,11 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
           ValueListenableBuilder(
             valueListenable: shoppingCartCount,
             builder: (context, value, child) {
-              return CustomBadge(icon: Icons.shopping_cart, color: AppColors.white, count: shoppingCartCount.value);
+              return CustomBadge(
+                icon: Icons.shopping_cart,
+                color: AppColors.white,
+                count: shoppingCartCount.value,
+              );
             },
           ),
         ],
@@ -73,7 +86,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                             buttonTextColor2.value = AppColor.grey;
                             body.value = aboutUs();
                           },
-                          style: FilledButton.styleFrom(shape: RoundedRectangleBorder(), backgroundColor: AppColors.tabBarColor, elevation: 0, foregroundColor: buttonTextColor1.value),
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(),
+                            backgroundColor: AppColors.tabBarColor,
+                            elevation: 0,
+                            foregroundColor: buttonTextColor1.value,
+                          ),
                           child: Text('About Us'),
                         ),
                       );
@@ -89,7 +107,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                             buttonTextColor1.value = AppColor.grey;
                             body.value = review();
                           },
-                          style: FilledButton.styleFrom(shape: RoundedRectangleBorder(), backgroundColor: AppColors.tabBarColor, elevation: 0, foregroundColor: buttonTextColor2.value),
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(),
+                            backgroundColor: AppColors.tabBarColor,
+                            elevation: 0,
+                            foregroundColor: buttonTextColor2.value,
+                          ),
                           child: Text('Reviews'),
                         ),
                       );
@@ -111,12 +134,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
             right: 10.w,
             child: CustomListTile(
               wantBadge: true,
-              image: image,
-              title: title,
-              trailingText: trailingText,
-              subTitle: Text(subTitle, style: AppTextStyle.homePageSubTitleStyle),
-              subTitle2: subTitle2,
-              onTap: () => Navigator.pushNamed(context, AppRoute.storePage, arguments: {'shopName': title, 'storeImage': image, 'add': subTitle2}),
+              image: widget.image,
+              title: widget.title,
+              trailingText: widget.trailingText,
+              subTitle: Text(widget.subTitle, style: AppTextStyle.homePageSubTitleStyle),
+              subTitle2: widget.subTitle2,
+              onTap: () => context.pushRoute(
+                StoreRoute(add: widget.subTitle2, storeImage: widget.image, shopName: widget.title),
+              ),
             ),
           ),
         ],
@@ -144,7 +169,10 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
           child: Row(
             mainAxisAlignment: .spaceBetween,
             children: [
-              Text('${AppText.allReview} (${reviewsData.length * 2})', style: AppTextStyle.boldWord),
+              Text(
+                '${AppText.allReview} (${reviewsData.length * 2})',
+                style: AppTextStyle.boldWord,
+              ),
               Text(AppText.viewAll, style: AppTextStyle.boldWord),
             ],
           ),
@@ -173,7 +201,8 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                     );
                   }),
                 ),
-                subTitle2: 'Lorem Ipsum is simply dummy textLorem Ipsum is sim ply dummy textLorem Ipsum is simply dummy text',
+                subTitle2:
+                    'Lorem Ipsum is simply dummy textLorem Ipsum is sim ply dummy textLorem Ipsum is simply dummy text',
                 wantBadge: false,
               );
             },

@@ -6,7 +6,8 @@ class AppText {
   static String page1Title = 'Near by store and Product';
   static String page2Title = 'Secure Payment Method';
   static String page3Title = 'Chat with Supplier';
-  static String pageSubtitle = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.';
+  static String pageSubtitle =
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.';
   static String nextText = 'Next';
   static String goText = 'Go';
   static String phoneHintText = 'Phone Number';
@@ -26,7 +27,8 @@ class AppText {
   static String zipcode = 'Zipcode';
   static String termsCondition = 'Terms & Condition';
   static String walmartSearchText = 'Search Walmart...';
-  static String varificationText = 'Verification code has been send on your registered mobile number. Enter Verification code here.';
+  static String varificationText =
+      'Verification code has been send on your registered mobile number. Enter Verification code here.';
   static String homePageTitle1 = 'Walmart';
   static String homePageTitle2 = 'Stop & Shop';
   static String homePageTitle3 = 'Safeway';
@@ -78,6 +80,12 @@ class AppText {
   static String iceCream2Price = '\$35';
   static String iceCream1Weight = '20 mg';
   static String iceCream2Weight = '20 mg';
+}
+
+class HiveBoxName {
+  static String addressBox = 'addressBox';
+  static String userBox = 'userBox';
+  static String appSetting = 'app_setting';
 }
 
 class AppImage {

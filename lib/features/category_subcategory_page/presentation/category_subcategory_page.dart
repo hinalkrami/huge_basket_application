@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/core/constant/app_constant.dart';
 import 'package:new_app/core/utils/app_colors.dart';
@@ -8,8 +9,12 @@ import '../../../values/export.dart';
 import '../data/model/category_model.dart';
 import 'category.dart';
 
+@RoutePage()
 class StorePage extends StatefulWidget {
-  const StorePage({super.key});
+  StorePage({super.key, required this.add, required this.storeImage, required this.shopName});
+  String storeImage;
+  String add;
+  String shopName;
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -26,10 +31,6 @@ class _StorePageState extends State<StorePage> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    String storeImage = arg['storeImage'];
-    String add = arg['add'];
-    String shopName = arg['shopName'];
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -39,12 +40,16 @@ class _StorePageState extends State<StorePage> {
         leadingColor: AppColors.white,
         foregroundColor: AppColors.white,
         wantLeading: true,
-        title: shopName,
+        title: widget.shopName,
         action: [
           ValueListenableBuilder(
             valueListenable: shoppingCartCount,
             builder: (context, value, child) {
-              return CustomBadge(icon: Icons.shopping_cart, color: Colors.white, count: shoppingCartCount.value);
+              return CustomBadge(
+                icon: Icons.shopping_cart,
+                color: Colors.white,
+                count: shoppingCartCount.value,
+              );
             },
           ),
         ],
@@ -58,14 +63,18 @@ class _StorePageState extends State<StorePage> {
             decoration: BoxDecoration(
               color: Colors.black,
               backgroundBlendMode: .darken,
-              image: DecorationImage(fit: .fill, opacity: 0.8, image: AssetImage(storeImage)),
+              image: DecorationImage(
+                fit: .fill,
+                opacity: 0.8,
+                image: AssetImage(widget.storeImage),
+              ),
             ),
             child: Column(
               spacing: 15.h,
               children: [
-                CircleAvatar(backgroundImage: AssetImage(storeImage), radius: 40),
+                CircleAvatar(backgroundImage: AssetImage(widget.storeImage), radius: 40),
                 Text(
-                  add,
+                  widget.add,
                   style: TextStyle(color: AppColors.white, fontWeight: .bold),
                 ),
                 SearchBar(
@@ -82,9 +91,9 @@ class _StorePageState extends State<StorePage> {
             ),
           ),
           // Categories
-          CategoryPart(categoryIndex: categoryIndex),
+          CategoryPage(categoryIndex: categoryIndex),
           //subCategory
-          SubCategoryPart(categoryIndex: categoryIndex, categories: categories),
+          SubCategoryPage(categoryIndex: categoryIndex, categories: categories),
         ],
       ),
     );

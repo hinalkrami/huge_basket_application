@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/app_colors.dart';
@@ -5,14 +6,15 @@ import '../../../core/utils/app_text_style.dart';
 import '../../../values/export.dart';
 import '../data/model/category_model.dart';
 
-class CategoryPart extends StatefulWidget {
-  CategoryPart({super.key, required this.categoryIndex});
+@RoutePage()
+class CategoryPage extends StatefulWidget {
+  CategoryPage({super.key, required this.categoryIndex});
   ValueNotifier<int> categoryIndex;
   @override
-  State<CategoryPart> createState() => _CategoryPageState();
+  State<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPart> {
+class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return customContainer(
@@ -42,15 +44,36 @@ class _CategoryPageState extends State<CategoryPart> {
                             decoration: BoxDecoration(
                               color: AppColors.white,
                               shape: .circle,
-                              image: DecorationImage(fit: .contain, image: AssetImage(categories[index].categoryImage)),
-                              border: Border.all(color: widget.categoryIndex.value == index ? AppColors.primaryColor : Colors.transparent, width: 2),
-                              boxShadow: [BoxShadow(color: Color(0X4044B12C), offset: Offset(0, 0), blurRadius: 16)],
+                              image: DecorationImage(
+                                fit: .contain,
+                                image: AssetImage(categories[index].categoryImage),
+                              ),
+                              border: Border.all(
+                                color: widget.categoryIndex.value == index
+                                    ? AppColors.primaryColor
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0X4044B12C),
+                                  offset: Offset(0, 0),
+                                  blurRadius: 16,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                         Text(
                           categories[index].categoryName,
-                          style: TextStyle(fontSize: 10.sp, fontFamily: 'MyriadPro', fontWeight: .w600, color: widget.categoryIndex.value == index ? AppColors.primaryColor : AppColors.black),
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontFamily: 'MyriadPro',
+                            fontWeight: .w600,
+                            color: widget.categoryIndex.value == index
+                                ? AppColors.primaryColor
+                                : AppColors.black,
+                          ),
                         ),
                       ],
                     ),
@@ -69,7 +92,9 @@ class _CategoryPageState extends State<CategoryPart> {
       width: 1.sw,
       decoration: BoxDecoration(
         color: AppColors.tabBarColor,
-        boxShadow: [BoxShadow(color: AppColors.boxShadowColor, offset: Offset(0, 3), blurRadius: 10.r)],
+        boxShadow: [
+          BoxShadow(color: AppColors.boxShadowColor, offset: Offset(0, 3), blurRadius: 10.r),
+        ],
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       margin: EdgeInsets.symmetric(vertical: 10.h),

@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import '../../category_subcategory_page/data/model/category_model.dart';
 import '../../category_subcategory_page/data/model/product_model.dart';
 import '../../product_details_page/presentation/product_details_page.dart';
 
+@RoutePage()
 class ProductListingPage extends StatefulWidget {
   ProductListingPage({super.key, required this.productList, required this.subcategoryName});
   List<Product> productList;
@@ -32,17 +34,29 @@ class _ProductListingPageState extends State<ProductListingPage> {
           ValueListenableBuilder(
             valueListenable: shoppingCartCount,
             builder: (context, value, child) {
-              return CustomBadge(icon: Icons.shopping_cart, count: shoppingCartCount.value, color: AppColors.black);
+              return CustomBadge(
+                icon: Icons.shopping_cart,
+                count: shoppingCartCount.value,
+                color: AppColors.black,
+              );
             },
           ),
         ],
       ),
       body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 240),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: 240,
+        ),
         itemCount: widget.productList.length,
         itemBuilder: (context, proIndex) => InkWell(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => ProductDetailsPage(product: widget.productList[proIndex])));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ProductDetailsPage(product: widget.productList[proIndex]),
+              ),
+            );
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
@@ -51,7 +65,9 @@ class _ProductListingPageState extends State<ProductListingPage> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
-              boxShadow: [BoxShadow(offset: Offset(0, 0), color: Color(0X2000001A), blurRadius: 16)],
+              boxShadow: [
+                BoxShadow(offset: Offset(0, 0), color: Color(0X2000001A), blurRadius: 16),
+              ],
             ),
             child: Stack(
               alignment: AlignmentGeometry.topRight,
@@ -59,15 +75,28 @@ class _ProductListingPageState extends State<ProductListingPage> {
                 Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Image.asset(widget.productList[proIndex].productImage, height: 100.h, width: 100.w),
+                    Image.asset(
+                      widget.productList[proIndex].productImage,
+                      height: 100.h,
+                      width: 100.w,
+                    ),
                     Row(
                       mainAxisAlignment: .spaceBetween,
                       children: [
-                        Text(widget.productList[proIndex].productPrice, style: AppTextStyle.productPrice),
-                        Text(widget.productList[proIndex].productWeight, style: AppTextStyle.productWeight),
+                        Text(
+                          widget.productList[proIndex].productPrice,
+                          style: AppTextStyle.productPrice,
+                        ),
+                        Text(
+                          widget.productList[proIndex].productWeight,
+                          style: AppTextStyle.productWeight,
+                        ),
                       ],
                     ),
-                    Text(widget.productList[proIndex].productName, style: AppTextStyle.productNameStyle),
+                    Text(
+                      widget.productList[proIndex].productName,
+                      style: AppTextStyle.productNameStyle,
+                    ),
                   ],
                 ),
                 ValueListenableBuilder(
@@ -81,7 +110,9 @@ class _ProductListingPageState extends State<ProductListingPage> {
                         }
                         shoppingCartCount.value = cartProduct.length;
                       },
-                      child: cartProduct.contains(widget.productList[proIndex]) ? addToCart(widget.productList[proIndex]) : addToCartIcon(widget.productList[proIndex]),
+                      child: cartProduct.contains(widget.productList[proIndex])
+                          ? addToCart(widget.productList[proIndex])
+                          : addToCartIcon(widget.productList[proIndex]),
                     );
                   },
                 ),
@@ -113,7 +144,10 @@ class _ProductListingPageState extends State<ProductListingPage> {
                 onPressed: () {
                   product.cartCount.value++;
                 },
-                style: IconButton.styleFrom(overlayColor: AppColors.primaryColor, shape: CircleBorder()),
+                style: IconButton.styleFrom(
+                  overlayColor: AppColors.primaryColor,
+                  shape: CircleBorder(),
+                ),
                 iconSize: 18.sp,
                 splashRadius: 20.r,
                 icon: Icon(Icons.add_rounded, color: AppColors.black, weight: 30),
@@ -136,9 +170,15 @@ class _ProductListingPageState extends State<ProductListingPage> {
                     product.cartCount.value--;
                   }
                 },
-                style: IconButton.styleFrom(overlayColor: AppColors.primaryColor, shape: CircleBorder(), alignment: .center),
+                style: IconButton.styleFrom(
+                  overlayColor: AppColors.primaryColor,
+                  shape: CircleBorder(),
+                  alignment: .center,
+                ),
                 visualDensity: VisualDensity(vertical: -4),
-                icon: product.cartCount.value == 1 ? Icon(CupertinoIcons.delete, color: AppColor.red, weight: 30, size: 16.sp) : Icon(Icons.minimize_rounded, weight: 50, size: 18.sp),
+                icon: product.cartCount.value == 1
+                    ? Icon(CupertinoIcons.delete, color: AppColor.red, weight: 30, size: 16.sp)
+                    : Icon(Icons.minimize_rounded, weight: 50, size: 18.sp),
               ),
             ],
           ),
@@ -150,7 +190,12 @@ class _ProductListingPageState extends State<ProductListingPage> {
   Widget addToCartIcon(Product product) {
     product.cartCount.value = 1;
     return DottedBorder(
-      options: CircularDottedBorderOptions(color: AppColors.primaryColor, strokeWidth: 2, dashPattern: [5, 7], strokeCap: StrokeCap.round),
+      options: CircularDottedBorderOptions(
+        color: AppColors.primaryColor,
+        strokeWidth: 2,
+        dashPattern: [5, 7],
+        strokeCap: StrokeCap.round,
+      ),
       child: Container(
         decoration: BoxDecoration(color: AppColors.tabBarColor, shape: .circle),
         padding: EdgeInsets.all(2),

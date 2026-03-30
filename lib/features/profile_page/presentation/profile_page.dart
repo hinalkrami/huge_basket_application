@@ -1,16 +1,21 @@
 import 'dart:io';
 
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/utils/app_colors.dart';
 import 'package:new_app/core/utils/app_text_style.dart';
+import 'package:new_app/features/auth/data/model/user_details_model.dart';
+import 'package:new_app/features/auth/presentation/login_page.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/profile_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../values/export.dart';
+import '../../local/hive_box.dart';
 import '../data/profile_model/profile_data_model.dart';
 import 'manage_address/manage_address_page.dart';
 
+@RoutePage()
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -19,12 +24,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late final pref;
+  HiveBox box = HiveBox();
+
   List<ProfileDataModel> data = [
     ProfileDataModel(
       icon: Icons.location_on_outlined,
       title: 'Manage Address',
-      page: ManageAddressPage(),
+      page: ManageAddressRoute(),
     ),
     ProfileDataModel(icon: Icons.chat_bubble_outline_rounded, title: 'Recent Chat'),
     ProfileDataModel(icon: Icons.notifications_none_rounded, title: 'Notification'),
@@ -38,9 +44,8 @@ class _ProfilePageState extends State<ProfilePage> {
     ProfileDataModel(icon: Icons.logout, title: 'Logout'),
   ];
   void logOut() async {
-    pref = await SharedPreferences.getInstance();
-    pref.clear();
-    exit(0);
+    context.pushRoute(LoginRoute());
+    box.userBox.put('isLogin', UserDetailsModel(isLogin: false));
   }
 
   @override
@@ -55,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
         itemBuilder: (context, index) => InkWell(
           onTap: data[index].page != null
               ? () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => data[index].page!));
+                  context.pushRoute(data[index].page!);
                 }
               : index == data.length - 1
               ? logOut

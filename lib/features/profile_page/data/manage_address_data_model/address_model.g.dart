@@ -17,12 +17,12 @@ class AddressModelAdapter extends TypeAdapter<AddressModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AddressModel(
-      location: fields[0] as String,
-      unitNumber: fields[1] as String,
-      city: fields[2] as String,
-      state: fields[3] as String,
-      zipCode: fields[4] as String,
-      deliveryInstruction: fields[5] as String,
+      location: fields[0] as String?,
+      unitNumber: fields[1] as String?,
+      city: fields[2] as String?,
+      state: fields[3] as String?,
+      zipCode: fields[4] as String?,
+      deliveryInstruction: fields[5] as String?,
     );
   }
 

@@ -1,4 +1,7 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/features/category_subcategory_page/presentation/product.dart';
 import 'package:new_app/features/product_listing_page/presentation/product_listing_page.dart';
 import '../../../core/constant/app_constant.dart';
@@ -9,16 +12,17 @@ import '../data/model/category_model.dart';
 import '../data/model/product_model.dart';
 import '../data/model/sub_category_model.dart';
 
-class SubCategoryPart extends StatefulWidget {
-  SubCategoryPart({super.key, required this.categoryIndex, required this.categories});
+@RoutePage()
+class SubCategoryPage extends StatefulWidget {
+  SubCategoryPage({super.key, required this.categoryIndex, required this.categories});
   ValueNotifier<int> categoryIndex;
   List<CategoryModel> categories;
 
   @override
-  State<SubCategoryPart> createState() => _SubCategoryState();
+  State<SubCategoryPage> createState() => _SubCategoryState();
 }
 
-class _SubCategoryState extends State<SubCategoryPart> {
+class _SubCategoryState extends State<SubCategoryPage> {
   ValueNotifier<int> subCategoryIndex = ValueNotifier(-1);
   SubCategoryModel? subCategoryList;
   @override
@@ -50,10 +54,13 @@ class _SubCategoryState extends State<SubCategoryPart> {
                       children: [
                         Text(subCategoryList!.subCategoryName, style: AppTextStyle.categoryStyle),
                         TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ProductListingPage(productList: productList, subcategoryName: widget.categories[widget.categoryIndex.value].subcategory[subIndex].subCategoryName),
+                          onPressed: () => context.pushRoute(
+                            ProductListingRoute(
+                              productList: productList,
+                              subcategoryName: widget
+                                  .categories[widget.categoryIndex.value]
+                                  .subcategory[subIndex]
+                                  .subCategoryName,
                             ),
                           ),
                           child: Row(
@@ -67,7 +74,12 @@ class _SubCategoryState extends State<SubCategoryPart> {
                       ],
                     ),
                     // productList
-                    ProductPart(productList: productList, subCategoryIndex: subCategoryIndex, subIndex: subIndex, categoryIndex: widget.categoryIndex),
+                    ProductPage(
+                      productList: productList,
+                      subCategoryIndex: subCategoryIndex,
+                      subIndex: subIndex,
+                      categoryIndex: widget.categoryIndex,
+                    ),
                   ],
                 ),
               );
@@ -83,7 +95,9 @@ class _SubCategoryState extends State<SubCategoryPart> {
       width: 1.sw,
       decoration: BoxDecoration(
         color: AppColors.tabBarColor,
-        boxShadow: [BoxShadow(color: AppColors.boxShadowColor, offset: Offset(0, 3), blurRadius: 10.r)],
+        boxShadow: [
+          BoxShadow(color: AppColors.boxShadowColor, offset: Offset(0, 3), blurRadius: 10.r),
+        ],
       ),
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       margin: EdgeInsets.symmetric(vertical: 10.h),

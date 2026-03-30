@@ -1,12 +1,16 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/constant/app_constant.dart';
+import 'package:new_app/features/auth/data/model/user_details_model.dart';
 import 'package:new_app/widget/custom_button.dart';
 import 'package:new_app/widget/custom_text_field.dart';
 
 import '../../../values/export.dart';
 import '../../local/hive_box.dart';
 
+@RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -17,12 +21,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController phoneController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late ValueNotifier<CountryCode> _country;
+  HiveBox box = HiveBox();
 
   @override
   void initState() {
     // TODO: implement initState
-    phoneController = TextEditingController();
     super.initState();
+    phoneController = TextEditingController();
+    _country = ValueNotifier(.in_);
   }
 
   @override
@@ -30,6 +37,28 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement dispose
     phoneController.dispose();
     super.dispose();
+  }
+
+  void _onPressed() {
+    if (_formKey.currentState!.validate()) {
+      if (box.userBox.get('userNumber')!.userNumber == phoneController.text &&
+          box.userBox.get('userNumber')!.country == _country.value.name) {
+        context.pushRoute(MainHomeRoute());
+        box.userBox.put('isLogin', UserDetailsModel(isLogin: true));
+      } else {
+        context.pushRoute(
+          VarificationRoute(phoneNumber: phoneController.text, countryName: _country.value.name),
+        );
+      }
+    }
+  }
+
+  void _onCountryChanged(Country country) {
+    String code = country.alpha2Code;
+    _country.value = CountryCode.values.firstWhere(
+      (c) => c.name.toUpperCase() == code,
+      orElse: () => CountryCode.in_,
+    );
   }
 
   @override
@@ -49,14 +78,20 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   spacing: 20,
                   children: [
-                    CustomTextField(controller: phoneController, hint: AppText.phoneHintText, isPhoneNumber: true),
-                    CustomButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.pushNamed(context, AppRoute.varification);
-                          HiveBox().addLoginNumber(phoneController.text);
-                        }
+                    ValueListenableBuilder(
+                      valueListenable: _country,
+                      builder: (context, value, child) {
+                        return CustomTextField(
+                          controller: phoneController,
+                          hint: AppText.phoneHintText,
+                          isPhoneNumber: true,
+                          initialCountryCode: _country.value,
+                          onCountryChanged: _onCountryChanged,
+                        );
                       },
+                    ),
+                    CustomButton(
+                      onPressed: _onPressed,
                       buttonSize: true,
                       child: Text(AppText.loginButtonText),
                     ),

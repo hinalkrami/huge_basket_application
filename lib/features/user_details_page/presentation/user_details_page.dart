@@ -1,3 +1,6 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:countrify/countrify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_ce/hive.dart';
@@ -5,6 +8,7 @@ import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/constant/app_constant.dart';
 import 'package:new_app/core/utils/app_colors.dart';
 import 'package:new_app/core/utils/app_text_style.dart';
+import 'package:new_app/features/auth/data/model/user_details_model.dart';
 import 'package:new_app/widget/custom_app_bar.dart';
 import 'package:new_app/widget/custom_button.dart';
 import 'package:new_app/widget/custom_text_field.dart';
@@ -13,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../values/export.dart';
 import '../../local/hive_box.dart';
 
+@RoutePage()
 class DetailsPage extends StatefulWidget {
   const DetailsPage({super.key});
 
@@ -21,6 +26,8 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  HiveBox box = HiveBox();
+  late UserDetailsModel? user = box.userBox.get('userNumber');
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController businessNameController;
@@ -36,7 +43,7 @@ class _DetailsPageState extends State<DetailsPage> {
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
     emailController = TextEditingController();
-    phoneNumberController = TextEditingController();
+    phoneNumberController = TextEditingController(text: user?.userNumber);
     zipCodeController = TextEditingController();
   }
 
@@ -50,6 +57,20 @@ class _DetailsPageState extends State<DetailsPage> {
     phoneNumberController.dispose();
     zipCodeController.dispose();
     super.dispose();
+  }
+
+  void _onPressed() {
+    if (_formKey.currentState!.validate()) {
+      context.pushRoute(MainHomeRoute());
+      HiveBox().setUserDetails(
+        phoneNumberController.text,
+        businessNameController.text,
+        emailController.text,
+        firstNameController.text,
+        lastNameController.text,
+        zipCodeController.text,
+      );
+    }
   }
 
   @override
@@ -90,6 +111,10 @@ class _DetailsPageState extends State<DetailsPage> {
                   hint: AppText.phoneHintText,
                   controller: phoneNumberController,
                   keyBoardType: .phone,
+                  initialCountryCode: CountryCode.values.firstWhere(
+                    (e) => e.name == user!.country!,
+                    orElse: () => CountryCode.in_,
+                  ),
                 ),
                 CustomTextField(
                   hint: AppText.zipcode,
@@ -128,23 +153,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   },
                 ),
                 20.verticalSpace,
-                CustomButton(
-                  buttonSize: true,
-                  child: Text('Add'),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pushNamed(context, AppRoute.homePage);
-                      // HiveBox().addUserDetails(
-                      //   phoneNumberController.text,
-                      //   businessNameController.text,
-                      //   emailController.text,
-                      //   firstNameController.text,
-                      //   lastNameController.text,
-                      //   zipCodeController.text,
-                      // );
-                    }
-                  },
-                ),
+                CustomButton(buttonSize: true, onPressed: _onPressed, child: Text('Add')),
               ],
             ),
           ),

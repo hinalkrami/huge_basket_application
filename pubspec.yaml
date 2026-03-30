@@ -48,6 +48,8 @@ dependencies:
   hive_ce: ^2.19.3
   hive_ce_generator: ^1.11.1
   hive_ce_flutter: ^2.3.4
+  auto_route: ^11.1.0
+  collection: ^1.19.1
 
 flutter_intl:
   enabled: true # Required. Must be set to true to activate the package. Default: false
@@ -74,6 +76,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: any
   flutter_gen_runner: any
+  auto_route_generator: ^10.5.0
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
