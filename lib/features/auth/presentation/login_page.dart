@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     phoneController = TextEditingController();
     _country = ValueNotifier(.in_);
@@ -34,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     phoneController.dispose();
     super.dispose();
   }
