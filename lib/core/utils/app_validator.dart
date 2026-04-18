@@ -9,7 +9,6 @@ class AppValidator {
   RegExp phoneNumber = RegExp(r'^[6,7,8,9][0-9]*');
   RegExp name = RegExp(r'^[a-zA-z ]+');
   RegExp email = RegExp(r'^[a-z0-9]+@[a-z]+\.[a-z]+$');
-  IconData? suffixIcon;
   late List<TextInputFormatter>? nameFormatter = [FilteringTextInputFormatter.allow(name)];
   late List<TextInputFormatter>? zipCode = [
     FilteringTextInputFormatter.digitsOnly,

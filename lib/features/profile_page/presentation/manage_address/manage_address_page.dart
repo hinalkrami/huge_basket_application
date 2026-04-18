@@ -26,6 +26,19 @@ class _ManageAddressPageState extends State<ManageAddressPage> {
   HiveBox box = HiveBox();
   late List<AddressModel> listOfAddress;
   late ValueNotifier<AddressModel?>? selectedAddress;
+  void _onPressedToNavigateEditAddressPage(int index) {
+    context.pushRoute(EditAddressRoute(address: listOfAddress[index], index: index));
+  }
+
+  void _onPressedToDeleteAddress(int index) {
+    int orgIndex = (box.addressBox.length - 1) - index;
+    box.addressBox.deleteAt(orgIndex);
+  }
+
+  void _onPressedToAddAddress() {
+    context.pushRoute(AddAddressRoute());
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
@@ -42,13 +55,13 @@ class _ManageAddressPageState extends State<ManageAddressPage> {
                 selectedAddress = ValueNotifier(
                   listOfAddress.isNotEmpty ? listOfAddress.first : null,
                 );
-                return listOfAddress.isEmpty ? Text('No address added.') : _addressBuilder();
+                return listOfAddress.isEmpty
+                    ? Text(S.of(context).noAddressAdded)
+                    : _addressBuilder();
               },
             ),
             TextButton.icon(
-              onPressed: () {
-                context.pushRoute(AddAddressRoute());
-              },
+              onPressed: _onPressedToAddAddress,
               label: Text(s.addNew),
               icon: Icon(Icons.add_circle_outline, weight: 50, size: 25),
               style: TextButton.styleFrom(foregroundColor: AppColors.primaryColor),
@@ -115,10 +128,7 @@ class _ManageAddressPageState extends State<ManageAddressPage> {
                         children: [
                           Expanded(
                             child: FilledButton.tonalIcon(
-                              onPressed: () {
-                                int orgIndex = (box.addressBox.length - 1) - index;
-                                box.addressBox.deleteAt(orgIndex);
-                              },
+                              onPressed: () => _onPressedToDeleteAddress(index),
                               style: AppButtonStyle().filledButtonStyle,
                               label: Text(S.of(context).delete),
                               icon: Icon(CupertinoIcons.delete, color: AppColor.red),
@@ -131,9 +141,7 @@ class _ManageAddressPageState extends State<ManageAddressPage> {
                           ),
                           Expanded(
                             child: FilledButton.tonalIcon(
-                              onPressed: () => context.pushRoute(
-                                EditAddressRoute(address: listOfAddress[index], index: index),
-                              ),
+                              onPressed: () => _onPressedToNavigateEditAddressPage(index),
                               style: AppButtonStyle().filledButtonStyle,
                               icon: Icon(Icons.edit, color: AppColor.grey),
                               label: Text(S.of(context).change),

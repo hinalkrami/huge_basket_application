@@ -60,6 +60,18 @@ class _HomePageState extends State<HomePage> {
       trailingText: AppText.homePageTrailing5,
     ),
   ];
+  void _onTap(int index) {
+    context.pushRoute(
+      ShopDetailsRoute(
+        image: data[index].image,
+        title: data[index].title,
+        subTitle: data[index].subTitle1,
+        trailingText: data[index].trailingText,
+        subTitle2: data[index].subTitle2,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -81,15 +93,9 @@ class _HomePageState extends State<HomePage> {
               subTitle: Text(data[index].subTitle1, style: AppTextStyle.homePageSubTitleStyle),
               subTitle2: data[index].subTitle2,
               margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              onTap: () => context.pushRoute(
-                ShopDetailsRoute(
-                  image: data[index].image,
-                  title: data[index].title,
-                  subTitle: data[index].subTitle1,
-                  trailingText: data[index].trailingText,
-                  subTitle2: data[index].subTitle2,
-                ),
-              ),
+              onTap: () {
+                _onTap(index);
+              },
             ),
           ),
         ),

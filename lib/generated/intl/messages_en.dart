@@ -22,10 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "aboutUs": MessageLookupByLibrary.simpleMessage("About Us"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "addNew": MessageLookupByLibrary.simpleMessage("Add New"),
+        "addNewAddress":
+            MessageLookupByLibrary.simpleMessage("Add New Address"),
         "address": MessageLookupByLibrary.simpleMessage("Address"),
         "change": MessageLookupByLibrary.simpleMessage("Change"),
+        "chooseYourCategory":
+            MessageLookupByLibrary.simpleMessage("Choose your Category"),
         "city": MessageLookupByLibrary.simpleMessage("City"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deliveryInstruction":
@@ -34,7 +39,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterUnitNumber":
             MessageLookupByLibrary.simpleMessage("Enter Unit Number"),
         "name": MessageLookupByLibrary.simpleMessage("name"),
+        "noAddressAdded":
+            MessageLookupByLibrary.simpleMessage("No address added."),
+        "productDetails":
+            MessageLookupByLibrary.simpleMessage("Product Details"),
+        "reviews": MessageLookupByLibrary.simpleMessage("Reviews"),
         "state": MessageLookupByLibrary.simpleMessage("State"),
+        "storeDetails": MessageLookupByLibrary.simpleMessage("Store Details"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "zipcode": MessageLookupByLibrary.simpleMessage("Zipcode")
       };

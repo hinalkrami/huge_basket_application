@@ -31,7 +31,13 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPartState extends State<ProductPage> {
-  ValueNotifier<int> currentProduct = ValueNotifier(-1);
+  late ValueNotifier<int> currentProduct;
+  @override
+  void initState() {
+    super.initState();
+    currentProduct = ValueNotifier(-1);
+  }
+
   @override
   void dispose() {
     currentProduct.dispose();

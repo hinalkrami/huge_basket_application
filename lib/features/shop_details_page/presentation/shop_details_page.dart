@@ -11,6 +11,7 @@ import 'package:new_app/widget/custom_bedge.dart';
 import 'package:new_app/widget/custom_list_tile.dart';
 
 import '../../../core/utils/app_text_style.dart';
+import '../../../generated/l10n.dart';
 import '../../category_subcategory_page/data/model/category_model.dart';
 import '../data/model/review_data.dart';
 
@@ -34,14 +35,48 @@ class ShopDetailsPage extends StatefulWidget {
 }
 
 class _ShopDetailsPageState extends State<ShopDetailsPage> {
-  ValueNotifier<Color?> buttonTextColor1 = ValueNotifier(AppColors.primaryColor);
-  ValueNotifier<Color?> buttonTextColor2 = ValueNotifier(AppColor.grey);
-  late ValueNotifier<Widget> body = ValueNotifier(aboutUs());
+  late ValueNotifier<Color?> buttonTextColor1;
+  late ValueNotifier<Color?> buttonTextColor2;
+  late ValueNotifier<Widget> body;
   List<UserReviews> reviewsData = [
     UserReviews(image: AppImage.profile1, name: AppText.user1),
     UserReviews(image: AppImage.profile2, name: AppText.user2),
     UserReviews(image: AppImage.profile3, name: AppText.user3),
   ];
+  @override
+  void initState() {
+    super.initState();
+    buttonTextColor1 = ValueNotifier(AppColors.primaryColor);
+    buttonTextColor2 = ValueNotifier(AppColor.grey);
+    body = ValueNotifier(aboutUs());
+  }
+
+  @override
+  void dispose() {
+    buttonTextColor1.dispose();
+    buttonTextColor2.dispose();
+    body.dispose();
+    super.dispose();
+  }
+
+  void _onPressedForAboutUs() {
+    buttonTextColor1.value = AppColors.primaryColor;
+    buttonTextColor2.value = AppColor.grey;
+    body.value = aboutUs();
+  }
+
+  void _onPressedForReview() {
+    buttonTextColor2.value = AppColors.primaryColor;
+    buttonTextColor1.value = AppColor.grey;
+    body.value = review();
+  }
+
+  void _onTapToNavigateStorePage() {
+    context.pushRoute(
+      StoreRoute(add: widget.subTitle2, storeImage: widget.image, shopName: widget.title),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +84,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
       extendBody: true,
       appBar: CustomAppBar(
         appBarColor: Colors.transparent,
-        title: 'Store Details',
+        title: S.of(context).storeDetails,
         foregroundColor: Colors.white,
         wantLeading: true,
         leadingColor: AppColors.white,
@@ -81,18 +116,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                     builder: (context, value, child) {
                       return Expanded(
                         child: FilledButton(
-                          onPressed: () {
-                            buttonTextColor1.value = AppColors.primaryColor;
-                            buttonTextColor2.value = AppColor.grey;
-                            body.value = aboutUs();
-                          },
+                          onPressed: _onPressedForAboutUs,
                           style: FilledButton.styleFrom(
                             shape: RoundedRectangleBorder(),
                             backgroundColor: AppColors.tabBarColor,
                             elevation: 0,
                             foregroundColor: buttonTextColor1.value,
                           ),
-                          child: Text('About Us'),
+                          child: Text(S.of(context).aboutUs),
                         ),
                       );
                     },
@@ -102,18 +133,14 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                     builder: (context, value, child) {
                       return Expanded(
                         child: FilledButton(
-                          onPressed: () {
-                            buttonTextColor2.value = AppColors.primaryColor;
-                            buttonTextColor1.value = AppColor.grey;
-                            body.value = review();
-                          },
+                          onPressed: _onPressedForReview,
                           style: FilledButton.styleFrom(
                             shape: RoundedRectangleBorder(),
                             backgroundColor: AppColors.tabBarColor,
                             elevation: 0,
                             foregroundColor: buttonTextColor2.value,
                           ),
-                          child: Text('Reviews'),
+                          child: Text(S.of(context).reviews),
                         ),
                       );
                     },
@@ -137,11 +164,12 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
               image: widget.image,
               title: widget.title,
               trailingText: widget.trailingText,
-              subTitle: Text(widget.subTitle, style: AppTextStyle.homePageSubTitleStyle),
-              subTitle2: widget.subTitle2,
-              onTap: () => context.pushRoute(
-                StoreRoute(add: widget.subTitle2, storeImage: widget.image, shopName: widget.title),
+              subTitle: Text(
+                widget.subTitle,
+                style: AppTextStyle.homePageSubTitleStyle.copyWith(fontSize: 16),
               ),
+              subTitle2: widget.subTitle2,
+              onTap: _onTapToNavigateStorePage,
             ),
           ),
         ],
@@ -173,7 +201,7 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
                 '${AppText.allReview} (${reviewsData.length * 2})',
                 style: AppTextStyle.boldWord,
               ),
-              Text(AppText.viewAll, style: AppTextStyle.boldWord),
+              Text(AppText.viewAll, style: AppTextStyle.viewAllStyle),
             ],
           ),
         ),

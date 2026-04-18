@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:new_app/features/auth/data/model/user_details_model.dart';
 import 'package:new_app/features/auth/presentation/varification_page.dart';
 import 'package:new_app/features/home_page/presentation/main_home_page.dart';
+import 'package:new_app/features/local/hive_box.dart';
 import 'package:new_app/features/profile_page/presentation/manage_address/add_address.dart';
 import 'package:new_app/features/profile_page/presentation/manage_address/edit_address.dart';
 import 'package:new_app/features/profile_page/presentation/manage_address/manage_address_page.dart';
@@ -24,44 +29,34 @@ import '../../features/user_details_page/presentation/user_details_page.dart';
 import '../../features/walk_through/presentation/walk_through_page.dart';
 part 'app_route.gr.dart';
 
+class AuthGuard extends AutoRouteGuard {
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) {
+    HiveBox box = HiveBox();
+    bool isFirstTime = box.appSetting.get('isFirstTime', defaultValue: true);
+    UserDetailsModel? user = box.userBox.get(
+      'userNumber',
+      defaultValue: UserDetailsModel(isLogin: false),
+    );
+    if (isFirstTime) {
+      router.push(WalkThroughRoute());
+    } else if (!user!.isLogin!) {
+      router.push(LoginRoute());
+    } else {
+      resolver.next(true);
+    }
+  }
+}
+
 @AutoRouterConfig()
 class AppRoute extends RootStackRouter {
-  // static String walkThroughPage = '/';
-  static String loginPage = '/login';
-  static String varification = '/varification';
-  static String detailsPage = '/details';
-  static String homePage = '/home_page';
-  static String shopDetails = '/shopDetails';
-  static String storePage = '/store';
-  static String productListingPage = '/productListing';
-  static String productDetailsPage = '/productDetails';
-  static String profilePage = '/profilePage';
-  static String myOrderPage = '/orders';
-  static String manageAddress = '/manageAddress';
-  static String addNewAddress = '/addNewAddress';
-  static String editAddress = '/editAddress';
-  // static Map<String, WidgetBuilder> route = {
-  //   walkThroughPage: (context) => WalkThroughPage(),
-  //   loginPage: (context) => LoginPage(),
-  //   varification: (context) => VarificationPage(),
-  //   detailsPage: (context) => DetailsPage(),
-  //   homePage: (context) => MainHomePage(),
-  //   shopDetails: (context) => ShopDetailsPage(),
-  //   storePage: (context) => StorePage(),
-  //   // productListingPage:(context)=>ProductListingPage(productList: productList, subcategoryName: subcategoryName),
-  //   // productDetailsPage:(context)=>ProductDetailsPage(product: product),
-  //   // profilePage: (context) => ProfilePage(),
-  //   myOrderPage: (context) => MyOrderPage(),
-  //   manageAddress: (context) => ManageAddressPage(),
-  //   editAddress: (context) => EditAddress(),
-  // };
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: WalkThroughRoute.page, initial: true),
+    AutoRoute(page: WalkThroughRoute.page),
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: VarificationRoute.page),
     AutoRoute(page: DetailsRoute.page),
-    AutoRoute(page: MainHomeRoute.page),
+    AutoRoute(page: MainHomeRoute.page, initial: true, guards: [AuthGuard()]),
     AutoRoute(page: ShopDetailsRoute.page),
     AutoRoute(page: StoreRoute.page),
     AutoRoute(page: CategoryRoute.page),

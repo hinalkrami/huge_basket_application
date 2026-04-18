@@ -27,7 +27,7 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   HiveBox box = HiveBox();
-  late UserDetailsModel? user = box.userBox.get('userNumber');
+  late UserDetailsModel user;
   final ValueNotifier<bool> isChecked = ValueNotifier(false);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController businessNameController;
@@ -39,11 +39,12 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
+    user = box.userBox.get('userNumber')!;
     businessNameController = TextEditingController();
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
     emailController = TextEditingController();
-    phoneNumberController = TextEditingController(text: user?.userNumber);
+    phoneNumberController = TextEditingController(text: user.userNumber);
     zipCodeController = TextEditingController();
   }
 
@@ -112,7 +113,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   controller: phoneNumberController,
                   keyBoardType: .phone,
                   initialCountryCode: CountryCode.values.firstWhere(
-                    (e) => e.name == user!.country!,
+                    (e) => e.name == user.country,
                     orElse: () => CountryCode.in_,
                   ),
                 ),

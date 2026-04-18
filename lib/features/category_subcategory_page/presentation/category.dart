@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/utils/app_colors.dart';
 import '../../../core/utils/app_text_style.dart';
+import '../../../generated/l10n.dart';
 import '../../../values/export.dart';
 import '../data/model/category_model.dart';
 
@@ -15,13 +16,17 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  void _onTap(int index) {
+    widget.categoryIndex.value = index;
+  }
+
   @override
   Widget build(BuildContext context) {
     return customContainer(
       Column(
         crossAxisAlignment: .start,
         children: [
-          Text('Choose your Category', style: AppTextStyle.categoryStyle),
+          Text(S.of(context).chooseYourCategory, style: AppTextStyle.categoryStyle),
           ValueListenableBuilder(
             valueListenable: widget.categoryIndex,
             builder: (context, value, child) {
@@ -36,7 +41,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            widget.categoryIndex.value = index;
+                            _onTap(index);
                           },
                           child: Container(
                             height: 1.sh * 0.10,

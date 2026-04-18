@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:countrify/countrify.dart';
 import 'package:flutter/material.dart';
@@ -28,21 +30,34 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     phoneController = TextEditingController();
-    _country = ValueNotifier(.in_);
+    _country = ValueNotifier(CountryCodeEnum.in_);
   }
 
   @override
   void dispose() {
     phoneController.dispose();
+    _country.dispose();
     super.dispose();
   }
 
   void _onPressed() {
     if (_formKey.currentState!.validate()) {
-      if (box.userBox.get('userNumber')!.userNumber == phoneController.text &&
-          box.userBox.get('userNumber')!.country == _country.value.name) {
-        context.pushRoute(MainHomeRoute());
-        box.userBox.put('isLogin', UserDetailsModel(isLogin: true));
+      UserDetailsModel? user = box.userBox.get('userNumber');
+      if (user != null) {
+        {
+          if (box.userBox.get('userNumber')!.userNumber == phoneController.text &&
+              box.userBox.get('userNumber')!.country == _country.value.name) {
+            box.updateLoginNumber(phoneController.text, _country.value.name, true);
+            context.router.replaceAll([MainHomeRoute()]);
+          } else {
+            context.pushRoute(
+              VarificationRoute(
+                phoneNumber: phoneController.text,
+                countryName: _country.value.name,
+              ),
+            );
+          }
+        }
       } else {
         context.pushRoute(
           VarificationRoute(phoneNumber: phoneController.text, countryName: _country.value.name),
@@ -61,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    log('LoginScreen:isLogin:${box.userBox.get('userNumber')!.isLogin}');
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Center(

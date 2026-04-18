@@ -8,6 +8,7 @@ import 'package:new_app/features/category_subcategory_page/data/model/category_m
 import 'package:new_app/widget/custom_bedge.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../generated/l10n.dart';
 import '../../../values/export.dart';
 import '../../../widget/custom_app_bar.dart';
 import '../../category_subcategory_page/data/model/product_model.dart';
@@ -22,12 +23,36 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  final PageController _pageController = PageController();
-  ValueNotifier<bool> isProductInList = ValueNotifier(false);
+  late PageController _pageController;
+  late ValueNotifier<bool> isProductInList;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    isProductInList = ValueNotifier(false);
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
+    isProductInList.dispose();
     super.dispose();
+  }
+
+  void _onTap() {
+    widget.product.isSelected.value = true;
+    if (!cartProduct.contains(widget.product)) {
+      cartProduct.add(widget.product);
+    }
+    shoppingCartCount.value = cartProduct.length;
+    isProductInList.value = cartProduct.contains(widget.product);
+  }
+
+  void _onPressed() {
+    isProductInList.value = true;
+    widget.product.isSelected.value = true;
+    cartProduct.add(widget.product);
+    shoppingCartCount.value = cartProduct.length;
   }
 
   @override
@@ -56,6 +81,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Column(
             spacing: 10.h,
             children: [
+              //pageview of particular product
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -97,21 +123,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           valueListenable: widget.product.isSelected,
                           builder: (context, value, child) {
                             return InkWell(
-                              onTap: () {
-                                widget.product.isSelected.value = true;
-                                if (!cartProduct.contains(widget.product)) {
-                                  cartProduct.add(widget.product);
-                                }
-                                shoppingCartCount.value = cartProduct.length;
-                                isProductInList.value = cartProduct.contains(widget.product);
-                              },
+                              onTap: _onTap,
                               child: ValueListenableBuilder(
                                 valueListenable: isProductInList,
                                 builder: (context, value, child) {
                                   return cartProduct.contains(widget.product) ||
                                           isProductInList.value
-                                      ? addToCart(widget.product)
-                                      : addToCartIcon(widget.product);
+                                      ? _addToCart(widget.product)
+                                      : _addToCartIcon(widget.product);
                                 },
                               ),
                             );
@@ -123,6 +142,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ],
                 ).wrapPaddingSymmetric(vertical: 10.h, horizontal: 20.w),
               ),
+              //product details
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -135,7 +155,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       spacing: 5,
                       crossAxisAlignment: .start,
                       children: [
-                        Text('Product Details'),
+                        Text(S.of(context).productDetails),
                         Text(
                           'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem sum has been the industry\'s standard dummy text ever since the 1500s, when an unknown rinter ok a galley of type and scrambled it tomake a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
                         ),
@@ -146,6 +166,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
             ],
           ),
+          //add to cart button
           Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -156,14 +177,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               valueListenable: isProductInList,
               builder: (context, value, child) {
                 return ElevatedButton.icon(
-                  onPressed: isProductInList.value
-                      ? null
-                      : () {
-                          isProductInList.value = true;
-                          widget.product.isSelected.value = true;
-                          cartProduct.add(widget.product);
-                          shoppingCartCount.value = cartProduct.length;
-                        },
+                  onPressed: isProductInList.value ? null : _onPressed,
                   style: AppButtonStyle(wantChangeSize: true, width: 1.sw * 0.7).buttonStyle,
                   label: Text('Add to Cart'),
                   icon: Icon(Icons.shopping_bag_rounded),
@@ -176,7 +190,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget addToCart(Product product) {
+  Widget _addToCart(Product product) {
     return ValueListenableBuilder(
       valueListenable: product.cartCount,
       builder: (context, value, child) {
@@ -239,7 +253,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget addToCartIcon(Product product) {
+  Widget _addToCartIcon(Product product) {
     // product.cartCount.value = 1;
     return DottedBorder(
       options: CircularDottedBorderOptions(

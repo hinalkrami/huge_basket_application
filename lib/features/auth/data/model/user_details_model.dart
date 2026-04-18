@@ -5,32 +5,51 @@ part 'user_details_model.g.dart';
 @HiveType(typeId: 0)
 class UserDetailsModel {
   @HiveField(0)
-  late String? userNumber;
+  String? userNumber;
   @HiveField(1)
-  late String? businessName;
+  String? businessName;
   @HiveField(2)
-  late String? firstName;
+  String? firstName;
   @HiveField(3)
-  late String? lastName;
+  String? lastName;
   @HiveField(4)
-  late String? emailAdd;
+  String? emailAdd;
   @HiveField(5)
-  late String? zipCode;
+  String? zipCode;
   @HiveField(6)
-  late bool isLogin;
+  bool? isLogin;
   @HiveField(7)
-  late bool isDetailsFilled;
-  @HiveField(8)
-  late String? country;
+  String? country;
+
   UserDetailsModel({
     this.userNumber,
-    this.zipCode,
     this.businessName,
-    this.emailAdd,
     this.firstName,
     this.lastName,
-    this.isLogin = false,
-    this.isDetailsFilled = false,
+    this.emailAdd,
+    this.zipCode,
+    this.isLogin,
     this.country,
   });
+
+  UserDetailsModel copyWith({
+    String? userNumber,
+    String? businessName,
+    String? firstName,
+    String? lastName,
+    String? emailAdd,
+    String? zipCode,
+    bool? isLogin,
+    bool? isDetailsFilled,
+    String? country,
+  }) => UserDetailsModel(
+    userNumber: userNumber ?? this.userNumber,
+    businessName: businessName ?? this.businessName,
+    firstName: firstName ?? this.firstName,
+    lastName: lastName ?? this.lastName,
+    emailAdd: emailAdd ?? this.emailAdd,
+    zipCode: zipCode ?? this.zipCode,
+    isLogin: isLogin ?? this.isLogin,
+    country: country ?? this.country,
+  );
 }

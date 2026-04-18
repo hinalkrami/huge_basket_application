@@ -42,8 +42,7 @@ class _VarificationPageState extends State<VarificationPage> {
 
   void _onPressed() {
     if (otpController.length == 4) {
-      box.setLoginNumber(widget.phoneNumber, widget.countryName);
-      box.userBox.put('isLogin', UserDetailsModel(isLogin: true));
+      box.addUser(widget.phoneNumber, widget.countryName, true);
       context.pushRoute(DetailsRoute());
     }
   }

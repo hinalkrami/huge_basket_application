@@ -23,8 +23,14 @@ class SubCategoryPage extends StatefulWidget {
 }
 
 class _SubCategoryState extends State<SubCategoryPage> {
-  ValueNotifier<int> subCategoryIndex = ValueNotifier(-1);
+  late ValueNotifier<int> subCategoryIndex;
   SubCategoryModel? subCategoryList;
+  @override
+  void initState() {
+    super.initState();
+    subCategoryIndex = ValueNotifier(-1);
+  }
+
   @override
   void dispose() {
     subCategoryIndex.dispose();

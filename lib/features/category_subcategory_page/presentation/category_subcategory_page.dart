@@ -21,7 +21,12 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-  ValueNotifier<int> categoryIndex = ValueNotifier(0);
+  late ValueNotifier<int> categoryIndex;
+  @override
+  void initState() {
+    super.initState();
+    categoryIndex = ValueNotifier(0);
+  }
 
   @override
   void dispose() {

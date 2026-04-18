@@ -8,6 +8,8 @@ import 'package:new_app/features/auth/data/model/user_details_model.dart';
 import 'package:new_app/features/profile_page/data/manage_address_data_model/address_model.dart';
 import 'package:new_app/generated/l10n.dart';
 
+import 'features/local/hive_box.dart';
+
 void main() async {
   print("Main: Initializing...");
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,9 @@ void main() async {
   print("Main: Opening addressBox...");
   await Hive.openBox<AddressModel>(HiveBoxName.addressBox);
 
+  print("Main: Opening installBox...");
+  await Hive.openBox(HiveBoxName.appSetting);
+
   print("Main: Opening userBox...");
   await Hive.openBox<UserDetailsModel>(HiveBoxName.userBox);
 
@@ -32,6 +37,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final _appRouter = AppRoute();
+  HiveBox box = HiveBox();
 
   @override
   Widget build(BuildContext context) {

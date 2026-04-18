@@ -43,6 +43,21 @@ class _EditAddressState extends State<EditAddressPage> {
     super.dispose();
   }
 
+  void _onPressed() {
+    if (_formKey.currentState!.validate()) {
+      AddressModel editedAddress = AddressModel(
+        location: _address.text,
+        unitNumber: _unitNumber.text,
+        city: _city.text,
+        state: _state.text,
+        zipCode: _zipCode.text,
+        deliveryInstruction: _deliveryInstruction.text,
+      );
+      HiveBox().updateAddressDetails(widget.index!, editedAddress);
+      context.router.back();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,20 +95,7 @@ class _EditAddressState extends State<EditAddressPage> {
                 keyBoardType: .text,
               ),
               CustomButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    AddressModel editedAddress = AddressModel(
-                      location: _address.text,
-                      unitNumber: _unitNumber.text,
-                      city: _city.text,
-                      state: _state.text,
-                      zipCode: _zipCode.text,
-                      deliveryInstruction: _deliveryInstruction.text,
-                    );
-                    HiveBox().updateAddressDetails(widget.index!, editedAddress);
-                    context.router.back();
-                  }
-                },
+                onPressed: _onPressed,
                 buttonSize: true,
                 child: Text(S.of(context).update),
               ).wrapPaddingTop(70.h),

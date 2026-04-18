@@ -11,5 +11,12 @@
   "delete": "Delete",
   "change": "Change",
   "editAddress": "Edit Address",
-  "update": "Update"
+  "update": "Update",
+  "chooseYourCategory": "Choose your Category",
+  "productDetails": "Product Details",
+  "addNewAddress": "Add New Address",
+  "noAddressAdded": "No address added.",
+  "aboutUs": "About Us",
+  "reviews": "Reviews",
+  "storeDetails": "Store Details"
 }

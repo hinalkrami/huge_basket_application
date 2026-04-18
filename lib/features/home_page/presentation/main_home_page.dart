@@ -30,29 +30,8 @@ class _MainHomePageState extends State<MainHomePage> {
           appBar: CustomAppBar(
             title: navigationItems[currentIndex.value].pageTitle,
             toolBarHeight: 65,
-            leadingButton: currentIndex.value == 0
-                ? Center(
-                    child: CustomBadge(icon: Icons.notifications, color: Colors.black, count: 2),
-                  )
-                : IconButton(
-                    onPressed: () => currentIndex.value = 0,
-                    icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
-                  ),
-            action: [
-              ?currentIndex.value == 0
-                  ? ValueListenableBuilder(
-                      valueListenable: shoppingCartCount,
-                      builder: (context, value, child) {
-                        return CustomBadge(
-                          icon: Icons.shopping_cart,
-                          color: Colors.black,
-                          count: shoppingCartCount.value,
-                        );
-                      },
-                    )
-                  : null,
-              ?currentIndex.value == 2 ? Icon(Icons.edit_sharp, color: Colors.black) : null,
-            ],
+            leadingButton: _leadingButton(),
+            action: _actionButton(),
           ),
           body: navigationItems.elementAt(currentIndex.value).page,
           bottomNavigationBar: CustomNavigationBar(
@@ -62,5 +41,34 @@ class _MainHomePageState extends State<MainHomePage> {
         );
       },
     );
+  }
+
+  Widget _leadingButton() {
+    return currentIndex.value == 0
+        ? Center(
+            child: CustomBadge(icon: Icons.notifications, color: Colors.black, count: 2),
+          )
+        : IconButton(
+            onPressed: () => currentIndex.value = 0,
+            icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
+          );
+  }
+
+  List<Widget>? _actionButton() {
+    return [
+      ?currentIndex.value == 0
+          ? ValueListenableBuilder(
+              valueListenable: shoppingCartCount,
+              builder: (context, value, child) {
+                return CustomBadge(
+                  icon: Icons.shopping_cart,
+                  color: Colors.black,
+                  count: shoppingCartCount.value,
+                );
+              },
+            )
+          : null,
+      ?currentIndex.value == 2 ? Icon(Icons.edit_sharp, color: Colors.black) : null,
+    ];
   }
 }

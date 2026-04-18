@@ -24,7 +24,6 @@ class _WalkThroughPageState extends State<WalkThroughPage> {
   PageController pageController = PageController();
   ValueNotifier<int> pageIndex = ValueNotifier(0);
   HiveBox box = HiveBox();
-  late bool isLogin = box.userBox.get('isLogin')!.isLogin;
   late ValueChanged<int> skipFunction = (int pageIndex) {
     pageController.jumpToPage(2);
   };
@@ -36,14 +35,14 @@ class _WalkThroughPageState extends State<WalkThroughPage> {
   @override
   void initState() {
     super.initState();
-    isLogin ? context.pushRoute(MainHomeRoute()) : context;
   }
 
   void onNextPage(int pageIndex) {
     if (pageIndex != 2) {
       pageController.nextPage(duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
     } else {
-      context.pushRoute(LoginRoute());
+      box.appSetting.put('isFirstTime', false);
+      context.router.popAndPush(LoginRoute());
     }
   }
 

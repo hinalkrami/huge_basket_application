@@ -53,10 +53,24 @@ class _AddAddressState extends State<AddAddressPage> {
     super.dispose();
   }
 
+  void _onPressed() {
+    if (_formKey.currentState!.validate()) {
+      HiveBox().addAddressDetails(
+        _address.text,
+        _unitNumber.text,
+        _city.text,
+        _state.text,
+        _zipCode.text,
+        _deliveryInstruction.text,
+      );
+      context.router.back();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Add New Address', wantLeading: true),
+      appBar: CustomAppBar(title: S.of(context).addNewAddress, wantLeading: true),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -90,19 +104,7 @@ class _AddAddressState extends State<AddAddressPage> {
                 keyBoardType: .text,
               ),
               CustomButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    HiveBox().addAddressDetails(
-                      _address.text,
-                      _unitNumber.text,
-                      _city.text,
-                      _state.text,
-                      _zipCode.text,
-                      _deliveryInstruction.text,
-                    );
-                    context.router.back();
-                  }
-                },
+                onPressed: _onPressed,
                 buttonSize: true,
                 child: Text(S.of(context).add),
               ).wrapPaddingTop(70.h),

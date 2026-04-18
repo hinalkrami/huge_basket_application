@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app/core/config/app_route.dart';
 import 'package:new_app/core/utils/app_colors.dart';
 import 'package:new_app/widget/custom_app_bar.dart';
 import 'package:new_app/widget/custom_bedge.dart';
@@ -23,6 +25,18 @@ class ProductListingPage extends StatefulWidget {
 }
 
 class _ProductListingPageState extends State<ProductListingPage> {
+  void _onTapToOpenAddToCartButton(int proIndex) {
+    widget.productList[proIndex].isSelected.value = true;
+    if (!cartProduct.contains(widget.productList[proIndex])) {
+      cartProduct.add(widget.productList[proIndex]);
+    }
+    shoppingCartCount.value = cartProduct.length;
+  }
+
+  void _onTapToNavigate(int proIndex) {
+    context.pushRoute(ProductDetailsRoute(product: widget.productList[proIndex]));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,12 +65,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
         itemCount: widget.productList.length,
         itemBuilder: (context, proIndex) => InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ProductDetailsPage(product: widget.productList[proIndex]),
-              ),
-            );
+            _onTapToNavigate(proIndex);
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
@@ -104,15 +113,11 @@ class _ProductListingPageState extends State<ProductListingPage> {
                   builder: (context, value, child) {
                     return InkWell(
                       onTap: () {
-                        widget.productList[proIndex].isSelected.value = true;
-                        if (!cartProduct.contains(widget.productList[proIndex])) {
-                          cartProduct.add(widget.productList[proIndex]);
-                        }
-                        shoppingCartCount.value = cartProduct.length;
+                        _onTapToOpenAddToCartButton(proIndex);
                       },
                       child: cartProduct.contains(widget.productList[proIndex])
-                          ? addToCart(widget.productList[proIndex])
-                          : addToCartIcon(widget.productList[proIndex]),
+                          ? _addToCart(widget.productList[proIndex])
+                          : _addToCartIcon(widget.productList[proIndex]),
                     );
                   },
                 ),
@@ -124,7 +129,24 @@ class _ProductListingPageState extends State<ProductListingPage> {
     );
   }
 
-  Widget addToCart(Product product) {
+  Widget _addToCart(Product product) {
+    void increment() {
+      product.cartCount.value++;
+    }
+
+    void decrement() {
+      if (product.cartCount.value <= 1) {
+        product.isSelected.value = false;
+        product.cartCount.value = 0;
+        if (cartProduct.contains(product)) {
+          cartProduct.remove(product);
+        }
+        shoppingCartCount.value = cartProduct.length;
+      } else {
+        product.cartCount.value--;
+      }
+    }
+
     return ValueListenableBuilder(
       valueListenable: product.cartCount,
       builder: (context, value, child) {
@@ -141,9 +163,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
             mainAxisAlignment: .spaceEvenly,
             children: [
               IconButton(
-                onPressed: () {
-                  product.cartCount.value++;
-                },
+                onPressed: increment,
                 style: IconButton.styleFrom(
                   overlayColor: AppColors.primaryColor,
                   shape: CircleBorder(),
@@ -158,18 +178,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
                 style: TextStyle(fontSize: 16.sp, fontWeight: .w600),
               ),
               IconButton(
-                onPressed: () {
-                  if (product.cartCount.value <= 1) {
-                    product.isSelected.value = false;
-                    product.cartCount.value = 0;
-                    if (cartProduct.contains(product)) {
-                      cartProduct.remove(product);
-                    }
-                    shoppingCartCount.value = cartProduct.length;
-                  } else {
-                    product.cartCount.value--;
-                  }
-                },
+                onPressed: decrement,
                 style: IconButton.styleFrom(
                   overlayColor: AppColors.primaryColor,
                   shape: CircleBorder(),
@@ -187,7 +196,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
     );
   }
 
-  Widget addToCartIcon(Product product) {
+  Widget _addToCartIcon(Product product) {
     product.cartCount.value = 1;
     return DottedBorder(
       options: CircularDottedBorderOptions(

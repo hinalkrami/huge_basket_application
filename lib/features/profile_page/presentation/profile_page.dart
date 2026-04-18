@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/annotations.dart';
@@ -43,9 +44,15 @@ class _ProfilePageState extends State<ProfilePage> {
     ProfileDataModel(icon: Icons.contact_page_outlined, title: 'Contact Us'),
     ProfileDataModel(icon: Icons.logout, title: 'Logout'),
   ];
-  void logOut() async {
-    context.pushRoute(LoginRoute());
-    box.userBox.put('isLogin', UserDetailsModel(isLogin: false));
+  void _logOut() {
+    box.updateLoginStatus(false);
+    context.router.replaceAll([LoginRoute()]);
+    // context.router.pushAndPopUntil(LoginRoute(), predicate: (route) => false);
+    // context.router.popUntil((route) => route.settings.name == 'LoginRoute');
+  }
+
+  void _onTapToNavigatePage(int index) {
+    context.pushRoute(data[index].page!);
   }
 
   @override
@@ -60,10 +67,10 @@ class _ProfilePageState extends State<ProfilePage> {
         itemBuilder: (context, index) => InkWell(
           onTap: data[index].page != null
               ? () {
-                  context.pushRoute(data[index].page!);
+                  _onTapToNavigatePage(index);
                 }
               : index == data.length - 1
-              ? logOut
+              ? _logOut
               : () {},
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
